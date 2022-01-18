@@ -46,12 +46,103 @@
 	<link rel="stylesheet" type="text/css" href="css/revolutionslider_settings.css" media="screen" />
 
 	<script src="js/vendor/modernizr-2.6.2.min.js"></script>
+	
+	<!-- lien bs modal -->
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js" integrity="sha384-VHvPCCyXqtD5DqJeNxl2dtTyhF78xXNXdkwX1CZeRusQfRKp+tA7hAShOK/B/fQ2" crossorigin="anonymous"></script>
 </head>
 
 <body class="style-14">
 <!--[if lt IE 7]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->
+
+<!-- DEBUT MODAL -->
+<!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Open modal for @mdo</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@fat">Open modal for @fat</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Open modal for @getbootstrap</button> -->
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title bg-info" id="exampleModalLabel">Creation de compte</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+       <form method="post" action="Client" >
+	      <div class="modal-body">	       
+	          <div class="form-group">
+	            <label for="recipient-name" class="col-form-label">Nom:</label>
+	            <input type="text" class="form-control" id="recipient-name" name="nom">
+	          </div>
+	           <div class="form-group">
+	            <label for="prenom" class="col-form-label">Prenom:</label>
+	            <input type="text" class="form-control" id="prenom" name="prenom">
+	          </div>
+	           <div class="form-group">
+	            <label for="email" class="col-form-label">Email:</label>
+	            <input type="email" class="form-control" id="prenom" name="email">
+	          </div>
+	           <div class="form-group">
+	            <label for="pwd" class="col-form-label">mot de passe:</label>
+	            <input type="password" class="form-control" id="pwd" name="pwd">
+	          </div>
+	           <div class="form-group">
+	            <label for="tel" class="col-form-label">Telephone:</label>
+	            <input type="text" class="form-control" id="tel" name="tel">
+	          </div>
+	          
+	           <div class="form-group">
+	            <label for="message-text" class="col-form-label">Adresse:</label>
+	            <textarea class="form-control" id="message-text" name="adresse"></textarea>
+	          </div>       
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	        <button type="submit" class="btn btn-primary" name="btn" value="Inscription" >S'inscrire</button>
+	      </div>
+       </form>
+    </div>
+  </div>
+</div>
+<!-- FIN MODAL -->
+
+<!-- modal connexion -->
+<div class="modal fade" id="modal_connexion" tabindex="-1" aria-labelledby="modal_connexion" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title bg-info" id="modal_connexion">Connexion</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+       <form method="post" action="Client" >
+	      <div class="modal-body">      
+	       
+	           <div class="form-group">
+	            <label for="email" class="col-form-label">Email:</label>
+	            <input type="email" class="form-control" id="prenom" name="email">
+	          </div>
+	           <div class="form-group">
+	            <label for="pwd" class="col-form-label">mot de passe:</label>
+	            <input type="password" class="form-control" id="pwd" name="pwd">
+	          </div>	           
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
+	        <button type="submit" class="btn btn-primary" name="btn" value="Connexion" >Se connecter</button>
+	      </div>
+       </form>
+    </div>
+  </div>
+</div>
+
+
+<!-- fin modal connexion -->
 
 
 <!-- Start Loading -->
@@ -115,6 +206,9 @@
 					</ul>
 					<a href="#" class="btn btn-white btn-sm">View Cart</a> &nbsp; <a href="#" class="btn btn-color btn-sm">Checkout</a>
 				</div>
+				<a href="#" data-toggle="modal" data-target="#exampleModal" class="btn btn-white btn-xs">Créer un compte</a>
+				<a href="#" data-toggle="modal" data-target="#modal_connexion" class="btn btn-white btn-xs">Se connecter</a>
+				
 			</div>
 			<!-- Shopping kart ends -->
 
