@@ -21,12 +21,11 @@ public class AdminServlet extends HttpServlet {
 		//creation obj hhtp session deja ouverte dans le post
 		//verification si on a clique sur les parametres de logout
 		//redirection
-		HttpSession session = req.getSession();
-		
+		HttpSession session = req.getSession();		
 		if (req.getParameter("logout") !=null) {
 			if (req.getParameter("logout").equals("OK")) {
 				session.setAttribute("role", null);	
-				req.getRequestDispatcher("admin/login.jsp?kokok").forward(req, resp);
+				req.getRequestDispatcher("admin/login.jsp").forward(req, resp);
 			}
 		}else {
 			if (session.getAttribute("role")!=null){
@@ -35,9 +34,7 @@ public class AdminServlet extends HttpServlet {
 			else {
 				req.getRequestDispatcher("admin/login.jsp").forward(req, resp);
 			}	
-		}
-
-		
+		}		
 	}
 	
 	@Override
@@ -46,7 +43,7 @@ public class AdminServlet extends HttpServlet {
 		//super.doPost(req, resp);
 		//traitement des formulaires qui ont des methodes post
 					
-			//traitement authentification
+			//TRAITEMENT AUTHENTIFICATION
 			//recuperation des valeurs des champs "email" et "mdp" de formualire ou d'un parametre
 	
 			String email = req.getParameter("email"); 
@@ -60,6 +57,8 @@ public class AdminServlet extends HttpServlet {
 				sessionAdmin.setAttribute("email", email);
 			}//message d'erreur ="email/pasword incorrect"
 			else {
+				req.setAttribute("e", email);
+				req.setAttribute("m	", pwd);
 				String msg = "email/password incorrect";
 				req.setAttribute("msg", msg);
 				System.out.println(msg);
@@ -72,10 +71,8 @@ public class AdminServlet extends HttpServlet {
 				//Methode3: methode jsp
 				req.getRequestDispatcher("admin/login.jsp").forward(req, resp);	
 				
-			}	
-			
-		
-					
+			}
+								
 			req.getRequestDispatcher("admin/homeAdmin.jsp").forward(req, resp); //n'affiche pas le nom du fichier, on le protege// on peut recupere les setter
 
 
