@@ -1,12 +1,18 @@
 package controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import connexion.ConnexionBD;
+import dao.ClientsImp;
+import model.Users;
 
 public class AdminServlet extends HttpServlet {
 	
@@ -21,20 +27,40 @@ public class AdminServlet extends HttpServlet {
 		//creation obj hhtp session deja ouverte dans le post
 		//verification si on a clique sur les parametres de logout
 		//redirection
-		HttpSession session = req.getSession();		
-		if (req.getParameter("logout") !=null) {
-			if (req.getParameter("logout").equals("OK")) {
-				session.setAttribute("role", null);	
-				req.getRequestDispatcher("admin/login.jsp").forward(req, resp);
+		
+		/*METHODE1
+		 * HttpSession session = req.getSession(); if (req.getParameter("logout")
+		 * !=null) { if (req.getParameter("logout").equals("OK")) {
+		 * session.setAttribute("role", null);
+		 * req.getRequestDispatcher("admin/login.jsp").forward(req, resp); } }else { if
+		 * (session.getAttribute("role")!=null){
+		 * req.getRequestDispatcher("admin/homeAdmin.jsp").forward(req, resp); } else {
+		 * req.getRequestDispatcher("admin/login.jsp").forward(req, resp); } }
+		 */
+		
+		/*METHODE2*/
+		 	String email = req.getParameter("email");
+	        String pwd = req.getParameter("pwd");
+	         
+	        ClientsImp userDao = new ClientsImp();
+	         
+	        Users user = (Users) userDao.Authentification(email, pwd);
+			String destPage = "login.jsp";
+			 
+			if (user != null) {
+			    HttpSession session = req.getSession();
+			    session.setAttribute("user", user);
+			    //destPage = "admin/login.jsp";
+			} else {
+			    String message = "Invalid email/password";
+			    req.setAttribute("message", message);
 			}
-		}else {
-			if (session.getAttribute("role")!=null){
-				req.getRequestDispatcher("admin/homeAdmin.jsp").forward(req, resp);
-			}
-			else {
-				req.getRequestDispatcher("admin/login.jsp").forward(req, resp);
-			}	
-		}		
+			 
+			req.getRequestDispatcher("admin/login.jsp").forward(req, resp);
+			/*
+			 * RequestDispatcher dispatcher = req.getRequestDispatcher(destPage);
+			 * dispatcher.forward(req, resp);
+			 */
 	}
 	
 	@Override

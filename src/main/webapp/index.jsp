@@ -12,10 +12,115 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<!-- JQUERY ------------------------------------------------->
+	<link rel="stylesheet" href="css/jquery/screen.css">
+	<script src="js/jqueryValidate/lib/jquery.js"></script>
+	<script src="js/jqueryValidate/dist/jquery.validate.js"></script>
+	
+<!-- 	<script>
+		$.validator.setDefaults({
+			submitHandler: function() {
+				alert("submitted!");
+			}
+		});
+
+		$().ready(function() {			
+
+			// validate signup form on keyup and submit
+			$("#clientInscription").validate({
+				// rules----------------------------------------------------------
+				rules: {
+
+					nom: "required",
+					nom: {minlenght:4, maxlenght:15},
+
+					prenom: "required",
+					prenom: {required:true, minlenght:2, maxlenght:15 },
+
+					adresse: {
+						required: true,
+						minlength: 2
+					},
+
+					pwd: {
+						required: true,
+						minlength: 5
+					},
+
+// 					confirm_password: {
+// 						required: true,
+// 						minlength: 5,
+// 						equalTo: "#password"
+// 					},
+
+					email: {
+						required: true,
+						email: true,
+					},
+
+// 					confirm_email: {
+// 						required: true,
+// 						email: true,
+// 						equalTo: "@email"
+// 					},
+
+					tel: {
+						required: "true",
+						minlength: 10
+					}
+					
+				},
+				
+				// message----------------------------------------
+				messages: {
+
+					nom:{
+						required: "Veuillez saisir votre nom",
+						minlenght: "votre nom doit avoir au moin 2 carcateres",	
+						maxlenght: "maximum de 10 caracteres"					
+					} ,
+
+					prenom: "Veuillez saisir votre prenom",
+
+					adresse: {
+						required: "veuillez entrer votre adresse",
+						minlength: " 2 characters au minimum"
+					},
+
+					pwd: {
+						required: "Champs obligatoire",
+						minlength: " 5 characters long"
+					},
+
+// 					confirm_password: {
+// 						required: "Champs obligatoire",
+// 						minlength: "Your password must be at least 5 characters long",
+// 						equalTo: "Please enter the same password as above"
+// 					},
+
+					email: {
+						required: "Champs obligatoire",
+ 						email: "entrez un email valide"
+					}  ,
+// 					confirm_email: {
+// 						required: "Champs obligatoire",
+// 						equalTo: "Please enter the same email as above"
+// 					}  ,
+					
+					tel:{
+							required: "svp entrez votre numero",
+							minlenght: "entrez au moin 10 caracteres"
+						},					
+					
+				}
+			});
+		
+		});
+	</script> -->
 
 	<!-- Fav icon -->
-	<link rel="shortcut icon" href="img/favicon.ico">
-	
+	<link rel="shortcut icon" href="img/favicon.ico">	
 
 	<!-- Font -->
 	<link href='https://fonts.googleapis.com/css?family=Lato:400,400italic,900,700,700italic,300' rel='stylesheet' type='text/css'>
@@ -58,7 +163,7 @@
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->
 
-<!-- DEBUT MODAL -->
+<!-- DEBUT MODAL INSCRIPTION -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -68,7 +173,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-       <form method="post" action="Client" >
+       <form method="post" action="Client" id="clientInscription">
 	      <div class="modal-body">	       
 	          <div class="form-group">
 	            <label for="recipient-name" class="col-form-label">Nom:</label>
@@ -104,9 +209,9 @@
     </div>
   </div>
 </div>
-<!-- FIN MODAL -->
+<!-- FIN MODAL INSCRIPTION -->
 
-<!-- modal connexion -->
+<!-- MODAL CONNEXION -->
 <div class="modal fade" id="modal_connexion" tabindex="-1" aria-labelledby="modal_connexion" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -116,12 +221,13 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      
        <form method="post" action="Client" >
 	      <div class="modal-body">      
 	       
 	           <div class="form-group">
 	            <label for="email" class="col-form-label">Email:</label>
-	            <input type="email" class="form-control" id="prenom" name="email">
+	            <input type="email" class="form-control" id=email name="email">
 	          </div>
 	           <div class="form-group">
 	            <label for="pwd" class="col-form-label">mot de passe:</label>
@@ -132,11 +238,12 @@
 	        <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
 	        <button type="submit" class="btn btn-primary" name="btn" value="Connexion" >Se connecter</button>
 	      </div>
+	      
        </form>
     </div>
   </div>
 </div>
-<!-- fin modal connexion -->
+<!-- FIN MODAL CONNEXION -->
 
 
 <!-- Start Loading -->

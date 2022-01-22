@@ -20,8 +20,7 @@ public class ClientsImp implements ClientsInterface {
 		System.out.println(sql);
 		//Execution de requete
 		//Preparation de requete SQL
-		
-				
+						
 		try {
 			//prepration de requete sql
 			PreparedStatement ps=conn.getConnection().prepareStatement(sql);

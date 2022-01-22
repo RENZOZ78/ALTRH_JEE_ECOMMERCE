@@ -7,7 +7,67 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="author" content="">  
+    
+	
+	
+	<!-- JQUERY ------------------------------------------------->
+	<link rel="stylesheet" href="css/jquery/screen.css">
+	<script src="js/jqueryValidate/lib/jquery.js"></script>
+	<script src="js/jqueryValidate/dist/jquery.validate.js"></script>
+	
+	<script>
+		$.validator.setDefaults({
+			submitHandler: function() {
+				alert("submitted!");
+			}
+		});
+
+		$().ready(function() {			
+
+			// validate signup form on keyup and submit
+			$("#login").validate({
+				// rules----------------------------------------------------------
+				rules: {
+
+				
+
+					exampleInputEmail: {
+						required: true,
+						minlength: 2
+					},
+
+					exampleInputPassword: {
+						required: true,
+						minlength: 5
+					},
+
+// 					
+					
+				},
+				
+				// message----------------------------------------
+				messages: {
+
+				
+
+					exampleInputEmail: {
+						required: "veuillez entrer votre adresse",
+						minlength: " 2 characters au minimum"
+					},
+
+					exampleInputPassword: {
+						required: "Champs obligatoire",
+						minlength: " 5 characters long"
+								
+					
+				}
+			});
+		
+		});
+	</script>
+<!-- FIN JQUERY ------------------------------------------------->
+
 
     <title>SB Admin 2 - Login</title>
 
@@ -49,7 +109,8 @@
                                     </div>
                                     <% } %>
                                     
-                                    <form class="user" method="post"  action="admin">
+                                    
+                                    <form class="user" method="post"  action="admin" id="login">
                                         <div class="form-group">
                                             <input 	
                                             	type="email" 
@@ -79,6 +140,8 @@
                                         <button type="submit" class="btn btn-primary btn-user btn-block"> LOGIN  </button>                                
                                         <hr>                                        
                                     </form>
+                                    
+                                    
                                     <hr>
                                     <div class="text-center">
                                         <a class="small" href="forgot-password.html">Forgot Password?</a>

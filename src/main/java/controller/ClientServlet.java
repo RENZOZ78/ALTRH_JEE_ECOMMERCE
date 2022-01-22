@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dao.ClientsImp;
 import model.Users;
@@ -46,6 +47,7 @@ public class ClientServlet extends HttpServlet {
 		//Recupoeration de la valeur de bouton de name="btn"
 		String btnForm=request.getParameter("btn");
 		
+		//INSCRIPTION
 		//verificaiton si la valeur du bouton de form = inscription ou bien connexion
 		if(btnForm.equals("Inscription")) 
 		{
@@ -65,12 +67,46 @@ public class ClientServlet extends HttpServlet {
 			cltImp.Add(clt);
 
 		}
+		//CONNEXION
 		else if(btnForm.equals("Connexion")){
 			System.out.println("espace connexion");
-		}		
-		
-		
+			
+			String email = request.getParameter("email"); 
+			String pwd = request.getParameter("pwd");		
+			ClientsImp clientN = new ClientsImp();
+			
+			
+			//verification si l'email ="admin@gmail.com" et le pwds="admin2022"
+			//on a 2 attribut de session
+			if (email !=null && pwd !=null && email.contains("admin")  ) {			
+				HttpSession sessionAdmin = request.getSession();		
+				sessionAdmin.setAttribute("pwd", pwd);
+				sessionAdmin.setAttribute("email", email);	
+				//sessionAdmin.setAttribute("role", "role");	
+				request.getRequestDispatcher("admin/homeAdmin.jsp").forward(request, response);	
+				
+			}else if (email.equals("client.getNom()") && pwd.equals("client.getEmail()")) {	
+				
+				request.getRequestDispatcher("client/homeClient.jsp").forward(request, response);				
+			}
+			
+			//message d'erreur ="email/pasword incorrect"
+			else {
+				request.setAttribute("e", email);
+				request.setAttribute("m	", pwd);
+				String msg = "email/password incorrect";
+				request.setAttribute("msg", msg);
+				System.out.println(msg);
+				//Methode1
+				request.getRequestDispatcher("admin/erreurPage.jsp").forward(request, response);	
+			}
+		}
 		
 	}
-
 }
+		
+		
+	
+
+
+
