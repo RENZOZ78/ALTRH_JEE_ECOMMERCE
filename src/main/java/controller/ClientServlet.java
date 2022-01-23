@@ -69,29 +69,33 @@ public class ClientServlet extends HttpServlet {
 		}
 		//CONNEXION
 		else if(btnForm.equals("Connexion")){
-			System.out.println("espace connexion");
-			
+			System.out.println("espace connexion");			
 			String email = request.getParameter("email"); 
 			String pwd = request.getParameter("pwd");		
-			ClientsImp clientN = new ClientsImp();
-			
+			ClientsImp userDao = new ClientsImp();
+	         
+	        Users user = (Users) userDao.Authentification(email, pwd);			
 			
 			//verification si l'email ="admin@gmail.com" et le pwds="admin2022"
 			//on a 2 attribut de session
 			if (email !=null && pwd !=null && email.contains("admin")  ) {			
 				HttpSession sessionAdmin = request.getSession();		
-				sessionAdmin.setAttribute("pwd", pwd);
+				sessionAdmin.setAttribute("user", user);
 				sessionAdmin.setAttribute("email", email);	
-				//sessionAdmin.setAttribute("role", "role");	
+				sessionAdmin.setAttribute("role", "admin");	
 				request.getRequestDispatcher("admin/homeAdmin.jsp").forward(request, response);	
 				
-			}else if (email.equals("client.getNom()") && pwd.equals("client.getEmail()")) {	
+			}else if (email !=null && pwd !=null) {	
+				HttpSession sessionAdmin = request.getSession();
+				sessionAdmin.setAttribute("user", user);
+				sessionAdmin.setAttribute("email", email);
+				sessionAdmin.setAttribute("role", "client");
 				
 				request.getRequestDispatcher("client/homeClient.jsp").forward(request, response);				
 			}
 			
 			//message d'erreur ="email/pasword incorrect"
-			else {
+			else  {
 				request.setAttribute("e", email);
 				request.setAttribute("m	", pwd);
 				String msg = "email/password incorrect";

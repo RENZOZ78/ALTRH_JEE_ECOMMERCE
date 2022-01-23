@@ -110,7 +110,7 @@
                                     <% } %>
                                     
                                     
-                                    <form class="user" method="post"  action="admin" id="login">
+                                    <form class="user" method="post"  action="Client" id="login">
                                         <div class="form-group">
                                             <input 	
                                             	type="email" 
@@ -127,7 +127,7 @@
                                             	class="form-control form-control-user"
                                                 id="exampleInputPassword" 
                                                 placeholder="Password"
-                                                name="mdp"
+                                                name="pwd"
                                                 required>
                                         </div>                                      
                                         <div class="form-group">
@@ -137,7 +137,7 @@
                                                     Me</label>
                                             </div>
                                         </div>                                        
-                                        <button type="submit" class="btn btn-primary btn-user btn-block"> LOGIN  </button>                                
+                                        <button type="submit" class="btn btn-primary btn-user btn-block" name="btn" value="Connexion"> LOGIN  </button>                                
                                         <hr>                                        
                                     </form>
                                     
