@@ -3,6 +3,9 @@ package dao;
 import java.sql.DriverManager;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.sound.midi.Soundbank;
@@ -41,25 +44,111 @@ public class ClientsImp implements ClientsInterface {
 	@Override
 	public List<Users> getClient() {
 		// TODO Auto-generated method stub
-		return null;
+		String sql= "select * from client";
+		
+		//on cree un objet de type arrayList sert a remplir chaque enregistrement, ou chaque "pers"
+		//on va rajouter dans lea liste les enregistrements remplis
+		List<Users> ListesClients=new ArrayList<Users>();
+		
+		//prepared de la requete sql
+		try {
+			PreparedStatement ps=conn.getConnection().prepareStatement(sql);
+			//execution de resultat de perpapration
+			ResultSet resultat=ps.executeQuery(); //de type Resultset
+			
+			//parcourir le resultat de type Resultset
+			while(resultat.next()) {
+				Users pers = new Users();
+				
+				pers.setNom(resultat.getString("nom"));
+				pers.setPrenom(resultat.getString("prenom"));
+				pers.setAdresse(resultat.getString("adresse"));
+				pers.setId(resultat.getInt("id"));
+				pers.setMdp(resultat.getString("mdp"));
+				pers.setTel(resultat.getString("tel"));
+				pers.setEmail(resultat.getString("email"));
+				
+				//Enregistrer l'enregistrementd "pers" de la table de "User" dans un array de type List<Users>
+				//ajouter ou stoke dans cette liste l'objet de type users
+				ListesClients.add(pers);
+			}
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ListesClients;
+	
 	}
 
 	@Override
 	public void Modifier(Users client) {
 		// TODO Auto-generated method stub
 		
+		//METHODE2
+		 String sql="update client set nom='"+client.getNom()+"',prenom='"+client.getPrenom()+"',adresse='"+client.getAdresse()+"',id='"+client.getId()+"',mdp='"+client.getMdp()+"',tel='"+client.getTel()+"',email='"+client.getEmail()+"' where id='"+client.getId()+"' ";
+		 try {
+				PreparedStatement ps=conn.getConnection().prepareStatement(sql);			
+				
+				
+				int res = ps.executeUpdate();
+				if(res==0) {
+					System.out.println("modification echouée");
+				}
+				else {
+					System.out.println("modification effectuée");
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 
 	@Override
 	public void Supprimer(int idClient) {
 		// TODO Auto-generated method stub
+		//String sql="delete from Users where id='"+idClient"'";
+		String sql="delete from client where id="+idClient;
+		try {
+			PreparedStatement ps=conn.getConnection().prepareStatement(sql);
+			int res = ps.executeUpdate();
+			if(res==0) {
+				System.out.println("suppression echouée");
+			}
+			else {
+				System.out.println("suppression effectuée");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 		
 	}
 
 	@Override
 	public List<Users> Authentification(String email, String mdp) {
 		// TODO Auto-generated method stub
-		return null;
+		String sql= " select * from client where email= '"+email +"'&& mdp='"+mdp+"'  ";
+		System.out.println(sql);
+		List<Users> infos= new ArrayList<Users>();
+		try {
+			PreparedStatement ps=conn.getConnection().prepareStatement(sql);
+			ResultSet resultat = ps.executeQuery();
+			while(resultat.next()) {
+			Users user = new Users();
+			user.setNom(resultat.getString("nom"));
+			user.setPrenom(resultat.getString("prenom"));
+			user.setEmail(resultat.getString("email"));
+			infos.add(user);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return infos;
+		
 	}
 
 	@Override

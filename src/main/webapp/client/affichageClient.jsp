@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<%@ page import="model.Users" %>
+<%@ page import="dao.*" %>
+
 <head>
 
     <meta charset="utf-8">
@@ -13,12 +16,17 @@
 
     <!-- Custom fonts for this template-->
     <link href="TemplateAdmin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
     <link href="TemplateAdmin/css/sb-admin-2.min.css" rel="stylesheet">
+    
+    <!-- JQUERY ------------------------------------------------->
+	<link rel="stylesheet" href="css/jquery/screen.css">
+	<script src="js/jqueryValidate/lib/jquery.js"></script>
+	<script src="js/jqueryValidate/dist/jquery.validate.js"></script>
+	
 
 </head>
 
@@ -35,7 +43,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">SB Client <sup>2</sup></div>
+                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
             </a>
 
             <!-- Divider -->
@@ -58,18 +66,18 @@
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="admin?action=affichageC" data-toggle="collapse" data-target="#collapseTwo"
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
-                    <span>Vos informations</span>
+                    <span>Gestion Client</span>
                 </a>
-              <!--   <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Custom Components:</h6>
                         <a class="collapse-item" href="buttons.html">Buttons</a>
                         <a class="collapse-item" href="cards.html">Cards</a>
                     </div>
-                </div> -->
+                </div>
             </li>
 
             <!-- Nav Item - Utilities Collapse Menu -->
@@ -116,7 +124,7 @@
                         <div class="collapse-divider"></div>
                         <h6 class="collapse-header">Other Pages:</h6>
                         <a class="collapse-item" href="404.html">404 Page</a>
-                        <a class="collapse-item active" href="blank.html">Blank Page</a>
+                        <a class="collapse-item active" href="blank.html">Affiachege du contenu de la page client</a>
                     </div>
                 </div>
             </li>
@@ -361,7 +369,102 @@
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
+				<h1>INTERFACE AFFICHAGE</h1>
+				
+				<table class="table">
+				  <thead class="thead-dark">
+				    <tr>
+				      <th scope="col">id Client</th>
+				      <th scope="col">Nom</th>
+				      <th scope="col">Prénom</th>
+				      <th scope="col">Telephone</th>
+				      <th scope="col">Adresse</th>
+				      <th scope="col">Email</th>
+				      <th scope="col">Password</th>
+				      <th scope="col">Modification</th>
+				      <th scope="col">Suppression</th>
+				      <!-- <th scope="col">Détail</th> -->
+				    </tr>
+				  </thead>
+				  <tbody>				  
+				  <% ClientsImp cltImp=new ClientsImp();
+					  for(Users cle:cltImp.getClient()){ %>
+					  
+<!--debut modal modifier -->
+<div class="modal fade" id="ModalEditClient_<%=cle.getId() %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title bg-info" id="exampleModalLabel">Creation de compte</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+       <form method="post" action="Client" id="clientInscription">
+	      <div class="modal-body">	       
+	          <div class="form-group">
+	            <label for="recipient-name" class="col-form-label"  >Nom:</label>
+	            <input type="text" class="form-control" id="nom" name="nom" value="<%=cle.getNom() %>" >
+	          </div>
+	           <div class="form-group">
+	            <label for="prenom" class="col-form-label">Prenom:</label>
+	            <input type="text" class="form-control" id="prenom" name="prenom"  value="<%=cle.getPrenom() %>" >
+	          </div>
+	           <div class="form-group">
+	            <label for="email" class="col-form-label">Email:</label>
+	            <input type="email" class="form-control" id="prenom" name="email"  value="<%=cle.getEmail() %>"  >
+	          </div>
+	           <div class="form-group">
+	            <label for="pwd" class="col-form-label">mot de passe:</label>
+	            <input type="password" class="form-control" id="pwd" name="pwd" value="<%=cle.getMdp() %>"  >
+	          </div>
+	           <div class="form-group">
+	            <label for="tel" class="col-form-label">Telephone:</label>
+	            <input type="text" class="form-control" id="tel" name="tel" value="<%=cle.getTel()  %>" >
+	          </div>
+	          <input type="hidden" name="id" value="<%=cle.getId() %>" />
+	           <div class="form-group">
+	            <label for="message-text" class="col-form-label">Adresse:</label>
+	            <textarea class="form-control" id="message-text" name="adresse" value="<%=cle.getAdresse()  %>" ></textarea>
+	          </div>       
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	        <button	        		
+	        		type="submit" 
+	        		class="btn btn-primary" 
+	        		name="btn"
+					value="modifier" 
+				>Modifier</button>
+	      </div>
+       </form>
+    </div>
+  </div>
+</div>
 
+<!-- fin modal modifier -->
+					  
+					    <tr>
+					      <th scope="row"><%=cle.getId() %></th>
+					      <td><%=cle.getNom() %></td>
+					      <td><%=cle.getPrenom() %></td>
+					      <td><%=cle.getTel() %></td>
+						  <td><%=cle.getAdresse() %></td>
+					      <td><%=cle.getEmail() %></td>
+					      <td><%=cle.getMdp() %></td>
+					      
+							<!--lien modifier -->		
+							<td> <a href="#" onclick="if(!confirm('voulez-vous modifier?')) return false"  data-toggle="modal" data-target="#ModalEditClient_<%=cle.getId() %>" class="btn btn-outline-danger" >modfier</a> </td>
+							 
+							<!-- lien supprimer -->
+					      <td><a href="admin?action=supprimer&idClient=<%=cle.getId() %>" onclick="if(!confirm('voulez-vous supprimer?')) return false" class="btn btn-outline-primary"  >supprimer</a></td>
+					     
+					 	 </tr>
+			 	 	<% } %>
+				  </tbody>
+				</table>
+
+				
                 </div>
                 <!-- /.container-fluid -->
 

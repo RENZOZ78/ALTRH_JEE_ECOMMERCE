@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -21,47 +22,46 @@ public class AdminServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		//super.doGet(req, resp);
 		
-		//Message erreur methode2
 		
-		//LOGOUT
-		//creation obj hhtp session deja ouverte dans le post
-		//verification si on a clique sur les parametres de logout
-		//redirection
-		
-		/*METHODE1
-		 * HttpSession session = req.getSession(); if (req.getParameter("logout")
-		 * !=null) { if (req.getParameter("logout").equals("OK")) {
-		 * session.setAttribute("role", null);
-		 * req.getRequestDispatcher("admin/login.jsp").forward(req, resp); } }else { if
-		 * (session.getAttribute("role")!=null){
-		 * req.getRequestDispatcher("admin/homeAdmin.jsp").forward(req, resp); } else {
-		 * req.getRequestDispatcher("admin/login.jsp").forward(req, resp); } }
-		 */
-		
-		/*METHODE2*/
-		 	String email = req.getParameter("email");
-	        String pwd = req.getParameter("pwd");
-	         
-	        ClientsImp userDao = new ClientsImp();
-	         
-	        Users user = (Users) userDao.Authentification(email, pwd);
-			String destPage = "login.jsp";
+//		Instance de la classe ClientsImp
+		ClientsImp cltImp=new ClientsImp();	
+		 HttpSession session = req.getSession(); 
+		 String logout = req.getParameter("logout");
+			if (logout != null) {
+				session.setAttribute("role", null);	
+				//pour ne pas afficher la page de l'url
+				resp.sendRedirect("admin");
+			}			
+			else if (session.getAttribute("role")!= null ) {			 
+			 System.out.println("admin connecte");
+			 String action=req.getParameter("action"); 
 			 
-			if (user != null) {
-			    HttpSession session = req.getSession();
-			    session.setAttribute("user", user);
-			    //destPage = "admin/login.jsp";
-			} else {
-			    String message = "Invalid email/password";
-			    req.setAttribute("message", message);
-			}
-			 
-			req.getRequestDispatcher("admin/login.jsp").forward(req, resp);
-			/*
-			 * RequestDispatcher dispatcher = req.getRequestDispatcher(destPage);
-			 * dispatcher.forward(req, resp);
-			 */
-	}
+			 if(action!= null) {									
+					//AFFICHAGE
+				    if(action.equals("affichage")) {				 
+					req.getRequestDispatcher("admin/affichageUser.jsp").forward(req, resp);
+				    }				    
+				    //SUPPRESSION CLIENT
+				    else if(action.equals("supprimer")){				    	
+				    	int idClient = Integer.parseInt(req.getParameter("idClient"));
+				    	cltImp.Supprimer(idClient);				    	
+				    	//req.getRequestDispatcher("admin/affichageUser.jsp").forward(req, resp);				    	
+				    	resp.sendRedirect("admin?action=affichage");
+				    }		    				    						 
+				}	//fin action!= null ln	34 
+			 else {					
+					req.getRequestDispatcher("admin/homeAdmin.jsp").forward(req, resp);
+				}			 
+		
+			}//fin ligne 29
+		 else {
+			 System.out.println("admin deconnecte");
+			 req.getRequestDispatcher("admin/login.jsp").forward(req, resp);
+		 }
+	} //fin de doGet
+		
+		
+	
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -70,10 +70,9 @@ public class AdminServlet extends HttpServlet {
 		//traitement des formulaires qui ont des methodes post
 					
 			//TRAITEMENT AUTHENTIFICATION
-			//recuperation des valeurs des champs "email" et "mdp" de formualire ou d'un parametre
-	
+			//recuperation des valeurs des champs "email" et "mdp" de formualire ou d'un parametre	
 			String email = req.getParameter("email"); 
-			String pwd = req.getParameter("mdp");
+			String pwd = req.getParameter("pwd");
 			
 			//verification si l'email ="admin@gmail.com" et le pwds="admin2022"
 			//on a 2 attribut de session

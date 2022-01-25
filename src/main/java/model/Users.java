@@ -4,6 +4,9 @@ public class Users {
 	
 	private int id;
 	private String nom,prenom,email,mdp,tel,adresse;
+	
+	
+   //	getter & setter
 	public int getId() {
 		return id;
 	}
