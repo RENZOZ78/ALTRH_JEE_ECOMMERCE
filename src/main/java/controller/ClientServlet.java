@@ -34,7 +34,37 @@ public class ClientServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		//response.getWriter().append("Served at: ").append(request.getContextPath());
+		
+		//LOGOUT
+		HttpSession session = request.getSession();	
+		String logoutClient =  request.getParameter("LogoutClient");
+		if(logoutClient != null) {			
+		
+		session.setAttribute("client", null);
+		response.sendRedirect("index.jsp");
+		}
+		
+		//AFFICHAGE INFOS CLIENT
+		else {
+			//Affichage infos clients detaille			
+			  String action = request.getParameter("action"); 
+			  if(action!= null) {	
+				  System.out.println("action: "+action);
+				  if(action.equals("affichageC")){ 
+					  System.out.println("connection client");						  
+						
+						  request.getRequestDispatcher("client/affichageClient.jsp").forward(request,
+						  response);
+						 
+					  //response.sendRedirect("client/affich")
+				  }else {
+					  System.out.println("vous n'etes pas connecte ");
+					  request.getRequestDispatcher("client/homeClient.jsp").forward(request, response);
+				  }
+			  }			
+			
+		}//fin else ln 47:affichage detaille
 	}
 
 	/**
@@ -42,10 +72,9 @@ public class ClientServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//doGet(request, response);
-		
-		//FORMULAIREINSCRIPTION /CONNEXION
-		//Recupoeration de la valeur de bouton de name="btn"
+		//doGet(request, response);		
+	
+		//Recuperation de la valeur de bouton de name="btn"
 		String btnForm=request.getParameter("btn");
 		ClientsImp cltImp=new ClientsImp();
 		
@@ -62,15 +91,49 @@ public class ClientServlet extends HttpServlet {
 			clt.setMdp(request.getParameter("pwd"));
 			clt.setEmail(request.getParameter("email"));
 			clt.setTel(request.getParameter("tel"));
-			System.out.println(clt.getNom());
-			// on va appeler la fonction add de class ClientsImp
-			//instance de la classe ClientImp			
+			System.out.println(clt.getNom());						
 			
-			cltImp.Add(clt);
+			//verifier si l'email existe => rediriger			
+			  String emailV=request.getParameter("email");
+			  ClientsImp userV= new ClientsImp(); 
+			  
+			  if(emailV!=null) {
+				  List<Users> ListV = userV.RechercheEmail(emailV, request.getParameter("tel"));
+				  int result = ListV.size();
+				  System.out.println(result);
+				  if(result!=0) { //si l'email existe deja
+					  
+					  // on verifier le tel par rappport a la valeur de la colonne tel de la table
+					  String tel = ListV.get(0).getTel();
+					  String emailT = ListV.get(0).getEmail();
+					  System.out.println(tel);
+					  if (tel.equals(request.getParameter("tel"))&& !emailT.equals(request.getParameter("email")) ) {
+						  String msgErreurTel= "telephone "+request.getParameter("tel") +" existe deja";
+						  request.setAttribute("msgErreurTel", msgErreurTel);
+					  }else if(emailT.equals(request.getParameter("email"))&& !tel.equals(request.getParameter("tel"))){						  
+						  System.out.println("email  existe deja"); 
+						  String msg= "email "+request.getParameter("email")+" existe deja";
+						  request.setAttribute("msg",msg);
+					  }	else if( tel.equals(request.getParameter("tel")) && emailT.equals(request.getParameter("email") ) )	{
+						  System.out.println("email/tel  existe deja"); 
+						  String msg= "email "+request.getParameter("email")+" tel "+request.getParameter("tel") + " existe deja";
+						  request.setAttribute("msg",msg);
+					  }
+					  request.getRequestDispatcher("admin/erreurPage.jsp").forward(request, response);
+					  
+					  
+				  }else {// l'email n'existe pas
+						cltImp.Add(clt);
+						response.sendRedirect("index.jsp");
+				  }
+				  
+			  }		
 		}
+		
 		//CONNEXION
 		else if(btnForm.equals("Connexion")){
-			System.out.println("espace connexion");			
+			System.out.println("espace connexion");		
+			
 			String email = request.getParameter("email"); 
 			String pwd = request.getParameter("pwd");		
 			ClientsImp userDao = new ClientsImp();	         
@@ -78,7 +141,7 @@ public class ClientServlet extends HttpServlet {
 	        int nb= user.size(); //size pour compter le nombre des enregistrements retourné par la fonction appelé
 	        System.out.println(nb);
 	        
-	        if(nb==0) {
+	        if(nb==0) {//non connecte
 	        	System.out.println("vous n'etes pas membre");
 	        	request.setAttribute("e", email);
 				request.setAttribute("m	", pwd);
@@ -87,69 +150,33 @@ public class ClientServlet extends HttpServlet {
 				System.out.println(msg);			
 				request.getRequestDispatcher("admin/erreurPage.jsp").forward(request, response);	
 	        	
-	        }else {
-	        	System.out.println("vous etes membre");
-	        	
-	        	if (email !=null && pwd !=null && email.contains("admin")  ) {			
+	        }else {//connecté	      
+	        	System.out.println("vous etes membre");	        	
+	        	//recuperer l'enregistrement retourné par la fonction d'authentification
+	        	Users user2 = cltImp.Authentification(email, pwd).get(0);
+	     	      
 					HttpSession sessionAdmin = request.getSession();		
 					sessionAdmin.setAttribute("user", user);
 					sessionAdmin.setAttribute("email", email);	
 					sessionAdmin.setAttribute("role", "admin");	
-					request.getRequestDispatcher("admin/homeAdmin.jsp").forward(request, response);	
+					sessionAdmin.setAttribute("client", user2.getNom()+" "+user2.getPrenom());
+					//response.sendRedirect("index.jsp");					
 					
-				}else if (email !=null && pwd !=null) {	
-					HttpSession sessionAdmin = request.getSession();
-					sessionAdmin.setAttribute("user", user);
-					sessionAdmin.setAttribute("email", email);
-					sessionAdmin.setAttribute("role", "client");				
-					request.getRequestDispatcher("client/homeClient.jsp").forward(request, response);	
-					//System.out.println("espace connexion "+ user.getNom());
-	        	
-	        }
+					if(email.contains("admin")){
+						System.out.println("vous etes admin");
+						request.getRequestDispatcher("admin/homeAdmin.jsp").forward(request, response);	
+					}else {
+						System.out.println("vous etes client");														  
+						request.getRequestDispatcher("client/homeClient.jsp").forward(request, response);						  
+					}
+					  
+				} 
+		}
 	        
-			
-			//verification si l'email 
-			//on a 2 attribut de session
-			/*if (email !=null && pwd !=null && email.contains("admin")  ) {			
-				HttpSession sessionAdmin = request.getSession();		
-				sessionAdmin.setAttribute("user", user);
-				sessionAdmin.setAttribute("email", email);	
-				sessionAdmin.setAttribute("role", "admin");	
-				request.getRequestDispatcher("admin/homeAdmin.jsp").forward(request, response);	
-				
-			}*/
-	        //else if (email !=null && pwd !=null) {	
-				//HttpSession sessionAdmin = request.getSession();
-				//sessionAdmin.setAttribute("user", user);
-				//sessionAdmin.setAttribute("email", email);
-				//sessionAdmin.setAttribute("role", "client");				
-				//request.getRequestDispatcher("client/homeClient.jsp").forward(request, response);	
-				//System.out.println("espace connexion "+ user.getNom());
-				
-				//AFFICHAGE INFOS CLIENT
-				/*
-				 * String action=request.getParameter("action"); if(action.equals("affichageC"))
-				 * { System.out.println("conneciton client");
-				 * request.getRequestDispatcher("client/affichageClient.jsp").forward(request,
-				 * response); }
-				 */
-			//}			
-			
-			//message d'erreur ="email/pasword incorrect"
-			/*else  {
-				request.setAttribute("e", email);
-				request.setAttribute("m	", pwd);
-				String msg = "email/password incorrect";
-				request.setAttribute("msg", msg);
-				System.out.println(msg);
-				//Methode1
-				request.getRequestDispatcher("admin/erreurPage.jsp").forward(request, response);	
-			}*/
-		}
-		}
+
+					
 		//MODIFIER
-		else if(btnForm.equals("modifier")) {		
-			
+		else if (btnForm.equals("modifier")) {				
 			Users clt = new Users();
 			clt.setAdresse(request.getParameter("adresse"));
 			clt.setNom(request.getParameter("nom"));

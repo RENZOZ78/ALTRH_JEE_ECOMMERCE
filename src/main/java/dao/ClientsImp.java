@@ -16,6 +16,8 @@ import model.Users;
 public class ClientsImp implements ClientsInterface {	
 	
 	ConnexionBD conn; //variable globale de type conneciont
+	
+	//AJOUTER
 	@Override
 	public void Add(Users client) {
 		// TODO Auto-generated method stub
@@ -40,7 +42,7 @@ public class ClientsImp implements ClientsInterface {
 		}			
 	}
 	
-
+	//AFFICHER
 	@Override
 	public List<Users> getClient() {
 		// TODO Auto-generated method stub
@@ -80,6 +82,7 @@ public class ClientsImp implements ClientsInterface {
 	
 	}
 
+	//MODIFIER
 	@Override
 	public void Modifier(Users client) {
 		// TODO Auto-generated method stub
@@ -103,6 +106,7 @@ public class ClientsImp implements ClientsInterface {
 			}
 	}
 
+	//SUPPRIMER
 	@Override
 	public void Supprimer(int idClient) {
 		// TODO Auto-generated method stub
@@ -126,6 +130,7 @@ public class ClientsImp implements ClientsInterface {
 		
 	}
 
+	//AUTHENTIFIER
 	@Override
 	public List<Users> Authentification(String email, String mdp) {
 		// TODO Auto-generated method stub
@@ -151,10 +156,39 @@ public class ClientsImp implements ClientsInterface {
 		
 	}
 
+	//RECHERCHER
 	@Override
 	public List<Users> Recherche(String rech) {
 		// TODO Auto-generated method stub
+		
+		
+		
 		return null;
 	}
+	
+	//RECHERCHE EMAIL& TEL
+	@Override
+	public List<Users> RechercheEmail(String email, String tel) {
+		// TODO Auto-generated method stub
+		boolean result = true;
+		String sql= " select * from client where email= '"+email +"'|| tel='"+tel+"' ";
+		System.out.println(sql);
+		List<Users> emailR= new ArrayList<Users>();
+		try {
+			PreparedStatement ps=conn.getConnection().prepareStatement(sql);
+			ResultSet resultat = ps.executeQuery();
+			while(resultat.next()) {
+			Users user = new Users();			
+			user.setEmail(resultat.getString("email"));
+			user.setTel(resultat.getString("tel"));
+			emailR.add(user);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+	
+		
+		}return emailR;
 
+	}
 }

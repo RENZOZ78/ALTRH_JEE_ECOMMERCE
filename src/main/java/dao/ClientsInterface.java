@@ -16,7 +16,7 @@ public interface ClientsInterface {
 	//fonction de modificaiton 
 	public void  Modifier(Users client);
 	
-	//fonction supporimer
+	//fonction supprimer
 	public void Supprimer(int idClient); //idClient = nom du parametre
 	
 	//fonction authentification Client = return une list de client
@@ -24,6 +24,12 @@ public interface ClientsInterface {
 	
 	//fonction de recherche= return une liste de client
 	public List<Users> Recherche(String rech);
+	
+	//fonction de valider  email
+		//public boolean isValidateEmail  (String email);
+		
+	//fonction rechercher 
+		public List<Users> RechercheEmail( String email, String tel);
 	
 	
 }

@@ -36,6 +36,7 @@ public class AdminServlet extends HttpServlet {
 			 System.out.println("admin connecte");
 			 String action=req.getParameter("action"); 
 			 
+			 
 			 if(action!= null) {									
 					//AFFICHAGE
 				    if(action.equals("affichage")) {				 

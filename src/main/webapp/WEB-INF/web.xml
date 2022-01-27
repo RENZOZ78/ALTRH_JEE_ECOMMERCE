@@ -17,6 +17,16 @@
 		<url-pattern>/admin</url-pattern>
 	</servlet-mapping>
 	
+<!-- 	produit -->
+	<servlet>
+		<servlet-name>ProduitsS</servlet-name>
+		<servlet-class>controller.ProduitsServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>ProduitsS</servlet-name>
+		<url-pattern>/produits</url-pattern>
+	</servlet-mapping>
 
  
 </web-app>

@@ -8,8 +8,11 @@
 </head>
 <body>
 <p>page d'erreur</p>
-<p>Role <%=request.getAttribute("msg") %></p>
-
+<% if(request.getAttribute("msg")!=null){ %>
+<p> <%=request.getAttribute("msg") %></p>
+<% }else{ %>
+<p> <%=request.getAttribute("msgErreurTel") %></p>
+<% } %>
 
 </body>
 </html>

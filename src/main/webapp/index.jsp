@@ -307,8 +307,23 @@
 					</ul>
 					<a href="#" class="btn btn-white btn-sm">View Cart</a> &nbsp; <a href="#" class="btn btn-color btn-sm">Checkout</a>
 				</div>
-				<a href="#" data-toggle="modal" data-target="#exampleModal" class="btn btn-white btn-xs">Créer un compte</a>
-				<a href="#" data-toggle="modal" data-target="#modal_connexion" class="btn btn-white btn-xs">Se connecter</a>
+				
+				<!-- affichage deconnecte:creer compte/seconnecter ou  -->
+				<%if(request.getSession().getAttribute("client")==null){%>
+					<a href="#" class="btn btn-white btn-xs" data-toggle="modal" data-target="#exampleModal" >Créer un compte</a>
+					<a href="#" class="btn btn-white btn-xs" data-toggle="modal" data-target="#modal_connexion" >Se connecter</a>
+					<a href="admin" class="btn btn-white btn-xs"  >Administrateur</a>
+					<% } else{					
+						String client = request.getSession().getAttribute("client").toString();
+						System.out.println("client not null "+ client); %>
+						
+					<a class="btn btn-white btn-xs"  ><%=client %></a>
+					<a href="Client?LogoutClient=ok" class="btn btn-white btn-xs">Déconnexion</a>			
+							
+<!-- 				<a href="#" data-toggle="modal" data-target="#exampleModal" class="btn btn-white btn-xs">Créer un compte</a> -->
+<!-- 				<a href="#" data-toggle="modal" data-target="#modal_connexion" class="btn btn-white btn-xs">Se connecter</a> -->
+				
+				<% } %>
 				
 			</div>
 			<!-- Shopping kart ends -->
