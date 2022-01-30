@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<%@ page import="model.Produits" %>
+<%@ page import="dao.*" %>
+
 <head>
 
     <meta charset="utf-8">
@@ -13,16 +16,65 @@
 
     <!-- Custom fonts for this template-->
     <link href="TemplateAdmin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
     <link href="TemplateAdmin/css/sb-admin-2.min.css" rel="stylesheet">
+    
+    <!-- JQUERY ------------------------------------------------->
+	<link rel="stylesheet" href="css/jquery/screen.css">
+	<script src="js/jqueryValidate/lib/jquery.js"></script>
+	<script src="js/jqueryValidate/dist/jquery.validate.js"></script>
+	
 
 </head>
 
 <body id="page-top">
+
+<!-- DEBUT MODAL AJOUT -->
+<div class="modal fade" id="ModaleAjoutProduit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title bg-info" id="exampleModalLabel">Creation produit</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+       <form method="post" action="produits" id="produitAjout">
+	      <div class="modal-body">	       
+	          <div class="form-group">
+	            <label for="recipient-name" class="col-form-label">Reference:</label>
+	            <input type="text" class="form-control" id="recipient-name" name="ref">
+	          </div>
+	           <div class="form-group">
+	            <label for="prenom" class="col-form-label">Designation:</label>
+	            <input type="text" class="form-control" id="designation" name="designation">
+	          </div>
+	           <div class="form-group">
+	            <label for="email" class="col-form-label">Prix:</label>
+	            <input type="text" class="form-control" id="prix" name="prix"  >
+	          </div>
+	           <div class="form-group">
+	            <label for="pwd" class="col-form-label">Poids:</label>
+	            <input type="text" class="form-control" id="poids" name="poids"  >
+	          </div>
+	           <div class="form-group">
+	            <label for="tel" class="col-form-label">Stock:</label>
+	            <input type="text" class="form-control" id="stock" name="stock">
+	          </div>         
+	             
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	        <button type="submit" class="btn btn-primary" name="btn" value="ajout" >Ajouter</button>
+	      </div>
+       </form>
+    </div>
+  </div>
+</div>
+<!-- FIN MODAL AJOUT -->
 
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -31,7 +83,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.jsp">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
@@ -43,7 +95,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
-                <a class="nav-link" href="index.jsp">
+                <a class="nav-link" href="index.html">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -56,15 +108,14 @@
                 Interface
             </div>
 
-            <!--GESTION Nav Item - Pages Collapse Menu -->
-            <!-- gestion clients -->
+            <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="admin?action=affichage" 
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
-                    <span>Gestion Clients</span>
+                    <span>Gestion Client</span>
                 </a>
-                <div id="collapseTwoClient" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div id="collapseTwo2" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Custom Components:</h6>
                         <a class="collapse-item" href="buttons.html">Buttons</a>
@@ -72,8 +123,8 @@
                     </div>
                 </div>
             </li>
-            <!-- gestion produits -->
-             <li class="nav-item">
+
+			<li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
@@ -82,27 +133,12 @@
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header"  > <a href="produits?action=affichageP" >Affichage produits</a> </h6>
-                        <a class="collapse-item" href="buttons.html">Creer un produit</a>
+                        <a class="collapse-item" href="#" data-toggle="modal" data-target="#ModaleAjoutProduit" >Creer un produit</a>
                         <a class="collapse-item" href="cards.html">Supprimer</a>
                     </div>
                 </div>
             </li>
-             <!-- gestion commandes -->
-             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwoCommande"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Gestion Commandes</span>
-                </a>
-                <div id="collapseTwoCommande" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header"  > <a href="produits?action=affichageP" >Affichage commandes</a> </h6>
-                        <a class="collapse-item" href="buttons.html">Creer une commande</a>
-                        <a class="collapse-item" href="cards.html">Supprimer une commande</a>
-                    </div>
-                </div>
-            </li>
-
+            
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
@@ -147,7 +183,7 @@
                         <div class="collapse-divider"></div>
                         <h6 class="collapse-header">Other Pages:</h6>
                         <a class="collapse-item" href="404.html">404 Page</a>
-                        <a class="collapse-item active" href="blank.html">Blank Page</a>
+                        <a class="collapse-item active" href="blank.html">Affichage du contenu de la page client</a>
                     </div>
                 </div>
             </li>
@@ -168,8 +204,10 @@
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
+            
+            
 
-            <!-- Sidebar Toggler (Sidebar) -->
+            <!-- SIDEBAR Toggler (Sidebar) ------------------------------------->
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
@@ -387,12 +425,150 @@
                 </nav>
                 <!-- End of Topbar -->
 
-                <!-- Begin Page Content -->
+                <!-- Begin Page Content -------------------------------------------------------------->
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
+				<h1>INTERFACE AFFICHAGE</h1>
+				
+				<table class="table">
+				  <thead class="thead-dark">
+				    <tr>
+				      <th scope="col">id </th>
+				      <th scope="col">Reference</th>
+				      <th scope="col">Designation</th>
+				      <th scope="col">Prix</th>
+				      <th scope="col">Poids</th>
+				      <th scope="col">Stock</th>
+				     
+				      <th scope="col">Modification</th>
+				      <th scope="col">Suppression</th>
+				      <!-- <th scope="col">Détail</th> -->
+				    </tr>
+				  </thead>
+				  <tbody>				  
+				  <% ProduitsImp produitsImp=new ProduitsImp();
+					  for(Produits pdt:produitsImp.getProduit()){ %>
+					  
+<!-- DEBUT MODAL AJOUT -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title bg-info" id="exampleModalLabel">Creation de compte</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+       <form method="post" action="produits" id="produitAjout">
+	      <div class="modal-body">	       
+	          <div class="form-group">
+	            <label for="recipient-name" class="col-form-label">Reference:</label>
+	            <input type="text" class="form-control" id="recipient-name" name="reference">
+	          </div>
+	           <div class="form-group">
+	            <label for="prenom" class="col-form-label">Designation:</label>
+	            <input type="text" class="form-control" id="prenom" name="designaiton">
+	          </div>
+	           <div class="form-group">
+	            <label for="email" class="col-form-label">Prix:</label>
+	            <input type="email" class="form-control" id="prix" name="prix"  >
+	          </div>
+	           <div class="form-group">
+	            <label for="pwd" class="col-form-label">Poids:</label>
+	            <input type="password" class="form-control" id="poids" name="poids"  >
+	          </div>
+	           <div class="form-group">
+	            <label for="tel" class="col-form-label">Stock:</label>
+	            <input type="text" class="form-control" id="stock" name="stock">
+	          </div>         
+	             
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	        <button type="submit" class="btn btn-primary" name="btn" value="ajout" >Ajouter</button>
+	      </div>
+       </form>
+    </div>
+  </div>
+</div>
+<!-- FIN MODAL AJOUT -->
+					  
+<!--debut modal modifier -->
+<div class="modal fade" id="ModalEditProduit_<%=pdt.getId() %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title bg-info" id="exampleModalLabel">Creation de compte</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+       <form method="post" action="produits" id="produitAjout">
+	      <div class="modal-body">      	         
+	           <div class="form-group">
+	            <label for="prenom" class="col-form-label">Reference:</label>
+	            <input type="text" class="form-control" id="reference" name="ref"  value="<%=pdt.getReference() %>" >
+	          </div>
+	           <div class="form-group">
+	            <label for="email" class="col-form-label">Designation:</label>
+	            <input type="text" class="form-control" id="designation" name="designation"  value="<%=pdt.getDesignation() %>"  >
+	          </div>
+	           <div class="form-group">
+	            <label for="pwd" class="col-form-label">Prix:</label>
+	            <input type="text" class="form-control" id="prix" name="prix" value="<%=pdt.getPrix() %>"  >
+	          </div>
+	           <div class="form-group">
+	            <label for="tel" class="col-form-label">Poids:</label>
+	            <input type="text" class="form-control" id="poids" name="poids" value="<%=pdt.getPoids()  %>" >
+	          </div>
+	           <div class="form-group">
+	            <label for="tel" class="col-form-label">Stock:</label>
+	            <input type="text" class="form-control" id="stock" name="stock" value="<%=pdt.getStock()  %>" >
+	          </div>
+	          <input type="hidden" name="id" value="<%=pdt.getId() %>" />
+	               
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	        <button	        		
+	        		type="submit" 
+	        		class="btn btn-primary" 
+	        		name="btn"
+					value="modifier" 
+				>Modifier</button>
+	      </div>
+       </form>
+    </div>
+  </div>
+</div>
 
+<!-- fin modal modifier -->
+					  
+						<!--colonne supprimer et modifier -->
+					    <tr>
+					      <th scope="row"><%=pdt.getId() %></th>
+					      <td><%=pdt.getReference() %></td>
+					      <td><%=pdt.getDesignation() %></td>
+					      <td><%=pdt.getPrix() %></td>
+						  <td><%=pdt.getPrix() %></td>
+					      <td><%=pdt.getPoids() %></td>
+					      <td><%=pdt.getStock() %></td>
+					      
+							<!--lien modifier -->		
+							<td> <a href="#" onclick="if(!confirm('voulez-vous modifier?')) return false"  data-toggle="modal" data-target="#ModalEditProduit_<%=pdt.getId() %>" class="btn btn-outline-danger" >modfier</a> </td>
+							 
+							<!-- lien supprimer -->
+					      <td><a href="produits?action=supprimerP&id=<%=pdt.getId() %>" onclick="if(!confirm('voulez-vous supprimer?')) return false" class="btn btn-outline-primary"  >supprimer</a></td>
+					     
+					 	 </tr>
+					 	 <!--fin colonne supprimer et modifier -->
+			 	 	<% } %>
+				  </tbody>
+				</table>
+
+				
                 </div>
                 <!-- /.container-fluid -->
 

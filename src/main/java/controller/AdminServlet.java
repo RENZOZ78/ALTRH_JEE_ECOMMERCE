@@ -27,6 +27,8 @@ public class AdminServlet extends HttpServlet {
 		ClientsImp cltImp=new ClientsImp();	
 		 HttpSession session = req.getSession(); 
 		 String logout = req.getParameter("logout");
+		 
+		 	//LOGOUT
 			if (logout != null) {
 				session.setAttribute("role", null);	
 				//pour ne pas afficher la page de l'url
@@ -38,11 +40,11 @@ public class AdminServlet extends HttpServlet {
 			 
 			 
 			 if(action!= null) {									
-					//AFFICHAGE
+					//AFFICHAGE---------------
 				    if(action.equals("affichage")) {				 
 					req.getRequestDispatcher("admin/affichageUser.jsp").forward(req, resp);
 				    }				    
-				    //SUPPRESSION CLIENT
+				    //SUPPRESSION CLIENT------------------------
 				    else if(action.equals("supprimer")){				    	
 				    	int idClient = Integer.parseInt(req.getParameter("idClient"));
 				    	cltImp.Supprimer(idClient);				    	
@@ -60,8 +62,6 @@ public class AdminServlet extends HttpServlet {
 			 req.getRequestDispatcher("admin/login.jsp").forward(req, resp);
 		 }
 	} //fin de doGet
-		
-		
 	
 	
 	@Override
@@ -70,36 +70,31 @@ public class AdminServlet extends HttpServlet {
 		//super.doPost(req, resp);
 		//traitement des formulaires qui ont des methodes post
 					
-			//TRAITEMENT AUTHENTIFICATION
+			//TRAITEMENT AUTHENTIFICATION-------------
 			//recuperation des valeurs des champs "email" et "mdp" de formualire ou d'un parametre	
-			String email = req.getParameter("email"); 
-			String pwd = req.getParameter("pwd");
-			
-			//verification si l'email ="admin@gmail.com" et le pwds="admin2022"
-			//on a 2 attribut de session
-			if (email.equals("admin@gmail.com") && pwd.equals("admin2022")) {			
-				HttpSession sessionAdmin = req.getSession();		
-				sessionAdmin.setAttribute("role", "superAdmin");
-				sessionAdmin.setAttribute("email", email);
-			}//message d'erreur ="email/pasword incorrect"
-			else {
-				req.setAttribute("e", email);
-				req.setAttribute("m	", pwd);
-				String msg = "email/password incorrect";
-				req.setAttribute("msg", msg);
-				System.out.println(msg);
-				//Methode1
-				//req.getRequestDispatcher("admin/erreurPage.jsp").forward(req, resp);					
-				
-				//Methode2
-				//req.setAttribute("msgErreur", msg);
-				
-				//Methode3: methode jsp
-				req.getRequestDispatcher("admin/login.jsp").forward(req, resp);	
-				
-			}
+			/*
+			 * String email = req.getParameter("email"); String pwd =
+			 * req.getParameter("pwd");
+			 * 
+			 * //verification si l'email ="admin@gmail.com" et le pwds="admin2022" //on a 2
+			 * attribut de session if (email.equals("admin@gmail.com") &&
+			 * pwd.equals("admin2022")) { HttpSession sessionAdmin = req.getSession();
+			 * sessionAdmin.setAttribute("role", "superAdmin");
+			 * sessionAdmin.setAttribute("email", email); }//message d'erreur
+			 * ="email/pasword incorrect" else { req.setAttribute("e", email);
+			 * req.setAttribute("m	", pwd); String msg = "email/password incorrect";
+			 * req.setAttribute("msg", msg); System.out.println(msg); //Methode1
+			 * //req.getRequestDispatcher("admin/erreurPage.jsp").forward(req, resp);
+			 * 
+			 * //Methode2 //req.setAttribute("msgErreur", msg);
+			 * 
+			 * //Methode3: methode jsp
+			 * req.getRequestDispatcher("admin/login.jsp").forward(req, resp);
+			 * 
+			 * }
+			 */
 								
-			req.getRequestDispatcher("admin/homeAdmin.jsp").forward(req, resp); //n'affiche pas le nom du fichier, on le protege// on peut recupere les setter
+			/* req.getRequestDispatcher("admin/homeAdmin.jsp").forward(req, resp); */ //n'affiche pas le nom du fichier, on le protege// on peut recupere les setter
 
 
 					

@@ -3,6 +3,11 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
+
+<%@ page import="model.Produits" %>
+<%@ page import="model.Panier" %>
+<%@ page import="dao.*" %>
+
 <html class="no-js">
 <!--<![endif]-->
 
@@ -246,6 +251,7 @@
 <!-- FIN MODAL CONNEXION -->
 
 
+
 <!-- Start Loading -->
 <section class="loading-overlay">
 	<div class="Loading-Page">
@@ -270,16 +276,26 @@
 			</div>
 			<!-- Contact ends -->
 
+			
 			<!-- Shopping kart starts -->
 			<div class="tb-shopping-cart pull-right">
+			<%PanierImp panierImp=new PanierImp();
+			int idClient = Integer.parseInt(request.getSession().getAttribute("idClient").toString());
+			int nbPanier = panierImp.getPanier(idClient).size();
+			%>
 				<!-- Link with badge -->
-				<a href="#" class="btn btn-white btn-xs b-dropdown"><i class="fa fa-shopping-cart"></i> <i class="fa fa-angle-down color"></i> <span class="badge badge-color">2</span></a>
+				<a href="#" class="btn btn-white btn-xs b-dropdown"><i class="fa fa-shopping-cart"></i> <i class="fa fa-angle-down color"></i> <span class="badge badge-color"><%=nbPanier %></span></a>
 				<!-- Dropdown content with item details -->
 				<div class="b-dropdown-block">
 					<!-- Heading -->
 					<h4><i class="fa fa-shopping-cart color"></i> Your Items</h4>
 					<ul class="list-unstyled">
 						<!-- Item 1 -->
+						<% 
+						ProduitsImp produitImp= new ProduitsImp();
+				  for(Panier pan:panierImp.getPanier(idClient)){ 
+					  Produits prd= produitImp.Recherche(pan.getIdProduit()).get(0);
+					  %>
 						<li>
 							<!-- Item image -->
 							<div class="cart-img">
@@ -287,42 +303,35 @@
 							</div>
 							<!-- Item heading and price -->
 							<div class="cart-title">
-								<h5><a href="#">Premium Quality Shirt</a></h5>
+								<h5><a href="#"> <%=prd.getDesignation() %> </a></h5>
 								<!-- Item price -->
-								<span class="label label-color label-sm">$1,90</span>
+								<span class="label label-color label-sm"><%=prd.getPrix() %></span>
 							</div>
 							<div class="clearfix"></div>
 						</li>
+						<%} %>
 						<!-- Item 2 -->
-						<li>
-							<div class="cart-img">
-								<a href="#"><img src="img/ecommerce/view-cart/2.png" alt="" class="img-responsive" /></a>
-							</div>
-							<div class="cart-title">
-								<h5><a href="#">Premium Quality Shirt</a></h5>
-								<span class="label label-color label-sm">$1,20</span>
-							</div>
-							<div class="clearfix"></div>
-						</li>
+						
 					</ul>
 					<a href="#" class="btn btn-white btn-sm">View Cart</a> &nbsp; <a href="#" class="btn btn-color btn-sm">Checkout</a>
 				</div>
 				
-				<!-- affichage deconnecte:creer compte/seconnecter ou  -->
+				
+				<!-- affichage deconnecte=>creer compte/seconnecter ou  -->
 				<%if(request.getSession().getAttribute("client")==null){%>
 					<a href="#" class="btn btn-white btn-xs" data-toggle="modal" data-target="#exampleModal" >Créer un compte</a>
 					<a href="#" class="btn btn-white btn-xs" data-toggle="modal" data-target="#modal_connexion" >Se connecter</a>
 					<a href="admin" class="btn btn-white btn-xs"  >Administrateur</a>
-					<% } else{					
+					<% }
+				//sinon connecté
+				else{					
 						String client = request.getSession().getAttribute("client").toString();
 						System.out.println("client not null "+ client); %>
 						
 					<a class="btn btn-white btn-xs"  ><%=client %></a>
+					<a href="client/homeClient.jsp" class="btn btn-white btn-xs">Compte client</a>
 					<a href="Client?LogoutClient=ok" class="btn btn-white btn-xs">Déconnexion</a>			
-							
-<!-- 				<a href="#" data-toggle="modal" data-target="#exampleModal" class="btn btn-white btn-xs">Créer un compte</a> -->
-<!-- 				<a href="#" data-toggle="modal" data-target="#modal_connexion" class="btn btn-white btn-xs">Se connecter</a> -->
-				
+											
 				<% } %>
 				
 			</div>
@@ -629,230 +638,69 @@
 			</div>
 
 			<div class="row">
+			<!-- debut de bloc -->
+			<% ProduitsImp produitsImp=new ProduitsImp();
+				  for(Produits pdt:produitsImp.getProduit()){ %>
+					  
+		  <!-- debut modal panier -->
+ <div class="modal fade" id="modal_addPanier<%=pdt.getId() %>" tabindex="-1" aria-labelledby="modal_connexion" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title bg-info" id="modal_connexion">Panier</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+     <!-- si le client est connecté=> il peut ajouter des produits -->
+      <% if(request.getSession().getAttribute("idClient")!= null) { %>
+       <form method="post" action="panier" >
+	      <div class="modal-body">     	       
+	       		<!-- afficher la valeur de l'id, cacher -->
+	          <input type="hidden" name="idProduit"   value="<%=pdt.getId()  %>" >
+	          <!-- l'id client -->
+	            <input type="hidden" name="idClient"  value="<%=request.getSession().getAttribute("idClient")  %>" >
+	           <div class="form-group">
+	            <label for="quantite" class="col-form-label">quantité</label>
+	            <input type="number" class="form-control" id="pwd" name="quantite">
+	          </div>	           
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
+	        <button type="submit" class="btn btn-primary" name="btn" value="ajout" >Ajouter au panier</button>
+	      </div>	      
+       </form>
+       
+       <% }else { %>
+       <h1>vous n'etes pas connecté!</h1>
+       <% } %>
+       
+    </div>
+  </div>
+</div>
+<!-- fin modal ajouter panier -->
+					  
 				<div class="col-md-3 col-sm-6">
 					<!-- Shopping items -->
 					<div class="shopping-item">
 						<!-- Image -->
 						<a href="single-product.html"><img class="img-responsive" src="img/product/shop_item_01.jpg" alt="" /></a>
 						<!-- Shopping item name / Heading -->
-						<h4><a href="single-product.html">Brown Mini Skirt</a><span class="color pull-right">$49</span></h4>
+						<h4><a href="single-product.html"><%=pdt.getDesignation() %></a><span class="color pull-right"><%=pdt.getPrix() %></span></h4>
 						<div class="clearfix"></div>
 						<!-- Buy now button -->
 						<div class="visible-xs">
-							<a class="btn btn-color btn-sm" href="#">Buy Now</a>
+							<a class="btn btn-color btn-sm" href="#">Acheter</a>
 						</div>
 						<!-- Shopping item hover block & link -->
 						<div class="item-hover bg-color hidden-xs">
-							<a href="#">Add to cart</a>
+							<a  data-toggle="modal" data-target="#modal_addPanier<%=pdt.getId() %>" href="#">Ajouter </a>
 						</div>
 					</div>
 				</div>
-				<div class="col-md-3 col-sm-6">
-					<!-- Shopping items -->
-					<div class="shopping-item">
-						<!-- Image -->
-						<a href="single-product.html"><img class="img-responsive" src="img/product/shop_item_03.jpg" alt="" /></a>
-						<!-- Shopping item name / Heading -->
-						<h4><a href="single-product.html">Wool Two-Piece Suit</a><span class="color pull-right">$49</span></h4>
-						<div class="clearfix"></div>
-						<!-- Buy now button -->
-						<div class="visible-xs">
-							<a class="btn btn-color btn-sm" href="#">Buy Now</a>
-						</div>
-						<!-- Shopping item hover block & link -->
-						<div class="item-hover bg-color hidden-xs">
-							<a href="#">Add to cart</a>
-						</div>
-						<!-- Hot tag -->
-						<span class="hot-tag bg-red">NEW</span>
-					</div>
-				</div>
-				<div class="col-md-3 col-sm-6">
-					<!-- Shopping items -->
-					<div class="shopping-item">
-						<!-- Image -->
-						<a href="single-product.html"><img class="img-responsive" src="img/product/shop_item_05.jpg" alt="" /></a>
-						<!-- Shopping item name / Heading -->
-						<h4><a href="single-product.html">Vintage Sunglasses</a><span class="color pull-right">$49</span></h4>
-						<div class="clearfix"></div>
-						<!-- Buy now button -->
-						<div class="visible-xs">
-							<a class="btn btn-color btn-sm" href="#">Buy Now</a>
-						</div>
-						<!-- Shopping item hover block & link -->
-						<div class="item-hover bg-color hidden-xs">
-							<a href="#">Add to cart</a>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-3 col-sm-6">
-					<!-- Shopping items -->
-					<div class="shopping-item">
-						<!-- Image -->
-						<a href="single-product.html"><img class="img-responsive" src="img/product/shop_item_08.jpg" alt="" /></a>
-						<!-- Shopping item name / Heading -->
-						<h4><a href="single-product.html">Nulla luctus</a><span class="color pull-right">$49</span></h4>
-						<div class="clearfix"></div>
-						<!-- Buy now button -->
-						<div class="visible-xs">
-							<a class="btn btn-color btn-sm" href="#">Buy Now</a>
-						</div>
-						<!-- Shopping item hover block & link -->
-						<div class="item-hover bg-color hidden-xs">
-							<a href="#">Add to cart</a>
-						</div>
-						<!-- Hot tag -->
-						<span class="hot-tag bg-lblue">HOT</span>
-					</div>
-				</div>
-				<div class="col-md-3 col-sm-6">
-					<!-- Shopping items -->
-					<div class="shopping-item">
-						<!-- Image -->
-						<a href="single-product.html"><img class="img-responsive" src="img/product/shop_item_02.jpg" alt="" /></a>
-						<!-- Shopping item name / Heading -->
-						<h4><a title="Glory High Shoes" href="single-product.html">Glory High Shoes</a><span class="color pull-right">$49</span></h4>
-						<div class="clearfix"></div>
-						<!-- Buy now button -->
-						<div class="visible-xs">
-							<a class="btn btn-color btn-sm" href="#">Buy Now</a>
-						</div>
-						<!-- Shopping item hover block & link -->
-						<div class="item-hover bg-color hidden-xs">
-							<a href="#">Add to cart</a>
-						</div>
-						<!-- Hot tag -->
-						<span class="hot-tag bg-red">NEW</span>
-					</div>
-				</div>
-				<div class="col-md-3 col-sm-6">
-					<!-- Shopping items -->
-					<div class="shopping-item">
-						<!-- Image -->
-						<a href="#"><img class="img-responsive" src="img/product/shop_item_04.jpg" alt="" /></a>
-						<!-- Shopping item name / Heading -->
-						<h4><a title="Vintage Stripe Jumper" href="#">Vintage Stripe Jumper</a><span class="color pull-right">$49</span></h4>
-						<div class="clearfix"></div>
-						<!-- Buy now button -->
-						<div class="visible-xs">
-							<a class="btn btn-color btn-sm" href="#">Buy Now</a>
-						</div>
-						<!-- Shopping item hover block & link -->
-						<div class="item-hover bg-color hidden-xs">
-							<a href="#">Add to cart</a>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-3 col-sm-6">
-					<!-- Shopping items -->
-					<div class="shopping-item">
-						<!-- Image -->
-						<a href="single-product.html"><img class="img-responsive" src="img/product/shop_item_06.jpg" alt="" /></a>
-						<!-- Shopping item name / Heading -->
-						<h4><a href="single-product.html">Solid Blue Polo Shirt</a><span class="color pull-right">$49</span></h4>
-						<div class="clearfix"></div>
-						<!-- Buy now button -->
-						<div class="visible-xs">
-							<a class="btn btn-color btn-sm" href="#">Buy Now</a>
-						</div>
-						<!-- Shopping item hover block & link -->
-						<div class="item-hover bg-color hidden-xs">
-							<a href="#">Add to cart</a>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-3 col-sm-6">
-					<!-- Shopping items -->
-					<div class="shopping-item">
-						<!-- Image -->
-						<a href="#"><img class="img-responsive" src="img/product/shop_item_09.jpg" alt="" /></a>
-						<!-- Shopping item name / Heading -->
-						<h4><a title="Nulla luctus" href="#">Nulla luctus</a><span class="color pull-right">$49</span></h4>
-						<div class="clearfix"></div>
-						<!-- Buy now button -->
-						<div class="visible-xs">
-							<a class="btn btn-color btn-sm" href="#">Buy Now</a>
-						</div>
-						<!-- Shopping item hover block & link -->
-						<div class="item-hover bg-color hidden-xs">
-							<a href="#">Add to cart</a>
-						</div>
-						<!-- Hot tag -->
-						<span class="hot-tag bg-green">HOT</span>
-					</div>
-				</div>
-				<div class="col-md-3 col-sm-6">
-					<!-- Shopping items -->
-					<div class="shopping-item">
-						<!-- Image -->
-						<a href="#"><img class="img-responsive" src="img/product/product_item_01c.jpg" alt="" /></a>
-						<!-- Shopping item name / Heading -->
-						<h4><a href="#">Quasi Architects</a><span class="color pull-right">$49</span></h4>
-						<div class="clearfix"></div>
-						<!-- Buy now button -->
-						<div class="visible-xs">
-							<a class="btn btn-color btn-sm" href="#">Buy Now</a>
-						</div>
-						<!-- Shopping item hover block & link -->
-						<div class="item-hover bg-color hidden-xs">
-							<a href="#">Add to cart</a>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-3 col-sm-6">
-					<!-- Shopping items -->
-					<div class="shopping-item">
-						<!-- Image -->
-						<a href="single-product.html"><img class="img-responsive" src="img/product/product_item_02a.jpg" alt="" /></a>
-						<!-- Shopping item name / Heading -->
-						<h4><a href="single-product.html">Quasi Architects</a><span class="color pull-right">$49</span></h4>
-						<div class="clearfix"></div>
-						<!-- Buy now button -->
-						<div class="visible-xs">
-							<a class="btn btn-color btn-sm" href="#">Buy Now</a>
-						</div>
-						<!-- Shopping item hover block & link -->
-						<div class="item-hover bg-color hidden-xs">
-							<a href="#">Add to cart</a>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-3 col-sm-6">
-					<!-- Shopping items -->
-					<div class="shopping-item">
-						<!-- Image -->
-						<a href="single-product.html"><img class="img-responsive" src="img/product/product_item_01b.jpg" alt="" /></a>
-						<!-- Shopping item name / Heading -->
-						<h4><a href="single-product.html">Quasi Architects</a><span class="color pull-right">$49</span></h4>
-						<div class="clearfix"></div>
-						<!-- Buy now button -->
-						<div class="visible-xs">
-							<a class="btn btn-color btn-sm" href="#">Buy Now</a>
-						</div>
-						<!-- Shopping item hover block & link -->
-						<div class="item-hover bg-color hidden-xs">
-							<a href="#">Add to cart</a>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-3 col-sm-6">
-					<!-- Shopping items -->
-					<div class="shopping-item">
-						<!-- Image -->
-						<a href="single-product.html"><img class="img-responsive" src="img/product/product_item_01b.jpg" alt="" /></a>
-						<!-- Shopping item name / Heading -->
-						<h4><a href="single-product.html">Quasi Architects</a><span class="color pull-right">$49</span></h4>
-						<div class="clearfix"></div>
-						<!-- Buy now button -->
-						<div class="visible-xs">
-							<a class="btn btn-color btn-sm" href="#">Buy Now</a>
-						</div>
-						<!-- Shopping item hover block & link -->
-						<div class="item-hover bg-color hidden-xs">
-							<a href="#">Add to cart</a>
-						</div>
-					</div>
-				</div>
+				<!-- fin de bloc -->	
+				<% } %>			
 			</div>
 			<!-- Pagination -->
 			<div class="shopping-pagination pull-right">

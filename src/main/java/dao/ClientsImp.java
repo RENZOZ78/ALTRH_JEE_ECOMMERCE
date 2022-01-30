@@ -79,10 +79,10 @@ public class ClientsImp implements ClientsInterface {
 			e.printStackTrace();
 		}
 		return ListesClients;
-	
 	}
+	
 
-	//MODIFIER
+	//MODIFIER----------------
 	@Override
 	public void Modifier(Users client) {
 		// TODO Auto-generated method stub
@@ -90,8 +90,7 @@ public class ClientsImp implements ClientsInterface {
 		//METHODE2
 		 String sql="update client set nom='"+client.getNom()+"',prenom='"+client.getPrenom()+"',adresse='"+client.getAdresse()+"',id='"+client.getId()+"',mdp='"+client.getMdp()+"',tel='"+client.getTel()+"',email='"+client.getEmail()+"' where id='"+client.getId()+"' ";
 		 try {
-				PreparedStatement ps=conn.getConnection().prepareStatement(sql);			
-				
+				PreparedStatement ps=conn.getConnection().prepareStatement(sql);						
 				
 				int res = ps.executeUpdate();
 				if(res==0) {
@@ -106,7 +105,8 @@ public class ClientsImp implements ClientsInterface {
 			}
 	}
 
-	//SUPPRIMER
+	
+	//SUPPRIMER------------------
 	@Override
 	public void Supprimer(int idClient) {
 		// TODO Auto-generated method stub
@@ -124,13 +124,11 @@ public class ClientsImp implements ClientsInterface {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
-		
-		
+		}		
 	}
+	
 
-	//AUTHENTIFIER
+	//AUTHENTIFIER--------------
 	@Override
 	public List<Users> Authentification(String email, String mdp) {
 		// TODO Auto-generated method stub
@@ -143,6 +141,7 @@ public class ClientsImp implements ClientsInterface {
 			while(resultat.next()) {
 			Users user = new Users();
 			user.setNom(resultat.getString("nom"));
+			user.setId(resultat.getInt("id"));
 			user.setPrenom(resultat.getString("prenom"));
 			user.setEmail(resultat.getString("email"));
 			infos.add(user);
@@ -152,21 +151,19 @@ public class ClientsImp implements ClientsInterface {
 			e.printStackTrace();
 		}
 		
-		return infos;
-		
+		return infos;		
 	}
+	
 
-	//RECHERCHER
+	//RECHERCHER---------------
 	@Override
 	public List<Users> Recherche(String rech) {
-		// TODO Auto-generated method stub
-		
-		
-		
+		// TODO Auto-generated method stub		
 		return null;
 	}
 	
-	//RECHERCHE EMAIL& TEL
+	
+	//RECHERCHE EMAIL& TEL-------------------
 	@Override
 	public List<Users> RechercheEmail(String email, String tel) {
 		// TODO Auto-generated method stub

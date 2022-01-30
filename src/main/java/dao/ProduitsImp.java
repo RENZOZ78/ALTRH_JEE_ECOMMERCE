@@ -86,9 +86,7 @@ public class ProduitsImp implements ProduitsInterface {
 		//METHODE2
 		 String sql="update produit set reference='"+produit.getReference()+"',designation='"+produit.getDesignation()+"',prix='"+produit.getPrix()+"',poids='"+produit.getPoids()+"',QteStock='"+produit.getStock()+"' WHERE  id='"+produit.getId()+"'   ";
 		 try {
-				PreparedStatement ps=conn.getConnection().prepareStatement(sql);			
-				
-				
+				PreparedStatement ps=conn.getConnection().prepareStatement(sql);							
 				int res = ps.executeUpdate();
 				if(res==0) {
 					System.out.println("modification echouée");
@@ -124,8 +122,38 @@ public class ProduitsImp implements ProduitsInterface {
 	}
 
 	@Override
-	public List<Produits> Recherche(String rechProduit) {
+	public List<Produits> Recherche(int rechProduit) {
 		// TODO Auto-generated method stub
-		return null;
+		String sql= " select * from produit where id= "+rechProduit;
+		System.out.println(sql);
+		//Execution de requete
+		//Preparation de requete SQL
+		List<Produits> ListesProduits=new ArrayList<Produits>();
+						
+		try {
+			//prepration de requete sql
+			PreparedStatement ps=conn.getConnection().prepareStatement(sql);
+			
+			ResultSet resultat=ps.executeQuery(); //de type Resultset
+			
+			//parcourir le resultat de type Resultset
+			while(resultat.next()) {
+				Produits produit = new Produits();
+				produit.setId(resultat.getInt("id"));
+				produit.setReference(resultat.getString("reference"));
+				produit.setDesignation(resultat.getString("designation"));
+				produit.setPrix(resultat.getDouble("prix"));
+				produit.setPoids(resultat.getDouble("poids"));
+				produit.setStock(resultat.getInt("QteStock"));				
+				
+				//Enregistrer l'enregistrementd "produit" de la table de "User" dans un array de type List<Users>
+				//ajouter ou stoke dans cette liste l'objet de type users
+				ListesProduits.add(produit);		
+		}
+			}
+		catch (Exception e) {
+			e.printStackTrace();
+		}	
+		return ListesProduits;
 	}
 }

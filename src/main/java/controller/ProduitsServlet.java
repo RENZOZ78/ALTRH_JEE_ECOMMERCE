@@ -34,19 +34,20 @@ public class ProduitsServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		
-		String action =req.getParameter("action");		
-		
+		String action =req.getParameter("action");			
 		
 		//Instance de la classe ProduitsImp
 		ProduitsImp pdtImp=new ProduitsImp();		
 		Produits produit= new Produits();
-			 if(action!= null) {									
-					//AFFICHAGE page produit
+			 if(action!= null) {	
+				 
+					//AFFICHAGE page produit---------------------------
 				 	System.out.println("vous avez ajouté:"+produit.getDesignation());
 				    if(action.equals("affichageP")) {				 
 					req.getRequestDispatcher("admin/affichageProduits.jsp").forward(req, resp);
-				    }				    
-				    //SUPPRESSION PRODUIT
+				    }	
+				    
+				    //SUPPRESSION PRODUIT-----------------------------
 				    else if(action.equals("supprimerP")){		
 				    	System.out.println("vous avez supprimer: "+produit.getDesignation());
 				    	int id = Integer.parseInt(req.getParameter("id"));
@@ -69,14 +70,14 @@ public class ProduitsServlet extends HttpServlet {
 		//doGet(request, response);
 		
 		//instance de produitsImp
-		ProduitsImp produitsImp=new ProduitsImp();
-		
+		ProduitsImp produitsImp=new ProduitsImp();		
 		String action= request.getParameter("btn");
 		
 		if(action!=null) {
+			
+			//AJOUT DE PRODUIT--------------------------------	
 			if(action.equals("ajout")) {				
-			System.out.println("vous avez ajouté un produit:");
-			//AJOUT DE PRODUIT	
+			System.out.println("vous avez ajouté un produit:");			
 			//recuperation des champs formulaires ajout
 			String reference= request.getParameter("ref");
 			String designation =request.getParameter("designation");
@@ -84,7 +85,9 @@ public class ProduitsServlet extends HttpServlet {
 			Integer poids= Integer.parseInt(request.getParameter("poids"));
 			Integer stock= Integer.parseInt(request.getParameter("stock"));
 			
+			//instance d eproduit et setter attribut
 			Produits p = new Produits();
+			
 			//setter avec instance p de produit
 			p.setReference(reference);
 			p.setDesignation(designation);
@@ -92,13 +95,15 @@ public class ProduitsServlet extends HttpServlet {
 			p.setPoids(poids);
 			p.setStock(stock);			
 			
+			//appelle de la methode ajouter avec l'instance p
 			produitsImp.Add(p);
 			response.sendRedirect("produits?action=affichageP");
 			}
 			
-			else if(action.equals("modifier")) {				
-				System.out.println("vous avez modifié un produit:");
-				//MODIFIER DE PRODUIT	
+			else if(action.equals("modifier")) {
+				
+				//MODIFIER DE PRODUIT----------------------------
+				System.out.println("vous avez modifié un produit:");					
 				//champs formulaires modifier
 				String reference= request.getParameter("ref");
 				String designation =request.getParameter("designation");
@@ -107,7 +112,10 @@ public class ProduitsServlet extends HttpServlet {
 				int stock= Integer.parseInt(request.getParameter("stock"));
 				Integer id= Integer.parseInt(request.getParameter("id"));
 				
+				//instance p de Produits 
 				Produits p = new Produits();
+				
+				//nouveaux setter avec instance p
 				p.setReference(reference);
 				p.setDesignation(designation);
 				p.setPrix(prix);
@@ -115,6 +123,7 @@ public class ProduitsServlet extends HttpServlet {
 				p.setStock(stock);	
 				p.setId(id);	
 				
+				//appelle de methode modifier de produitsImp avec en parametre l'instance p
 				produitsImp.Modifier(p);
 				response.sendRedirect("produits?action=affichageP");
 				}

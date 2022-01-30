@@ -36,16 +36,16 @@ public class ClientServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		
-		//LOGOUT
+		//LOGOUT-----------------------------------
+		//creation de session
 		HttpSession session = request.getSession();	
 		String logoutClient =  request.getParameter("LogoutClient");
 		if(logoutClient != null) {			
-		
 		session.setAttribute("client", null);
 		response.sendRedirect("index.jsp");
 		}
 		
-		//AFFICHAGE INFOS CLIENT
+		//AFFICHAGE INFOS CLIENT----------------------------------
 		else {
 			//Affichage infos clients detaille			
 			  String action = request.getParameter("action"); 
@@ -62,10 +62,10 @@ public class ClientServlet extends HttpServlet {
 					  System.out.println("vous n'etes pas connecte ");
 					  request.getRequestDispatcher("client/homeClient.jsp").forward(request, response);
 				  }
-			  }			
-			
+			  }					
 		}//fin else ln 47:affichage detaille
 	}
+	
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -78,13 +78,15 @@ public class ClientServlet extends HttpServlet {
 		String btnForm=request.getParameter("btn");
 		ClientsImp cltImp=new ClientsImp();
 		
-		//INSCRIPTION
+		//INSCRIPTION /AJOUT CONTACT-------------------------------
 		//verificaiton si la valeur du bouton de form = inscription ou bien connexion
 		if(btnForm.equals("Inscription")) 
 		{
 			System.out.println("espace inscription");
-			//intance de la classe Clients
+			//intance de la classe Users
 			Users clt = new Users();
+			
+			//setter attributs avec l'instance clt
 			clt.setAdresse(request.getParameter("adresse"));
 			clt.setNom(request.getParameter("nom"));
 			clt.setPrenom(request.getParameter("prenom"));
@@ -103,7 +105,7 @@ public class ClientServlet extends HttpServlet {
 				  System.out.println(result);
 				  if(result!=0) { //si l'email existe deja
 					  
-					  // on verifier le tel par rappport a la valeur de la colonne tel de la table
+					  // on verifier si le tel par rappport a la valeur de la colonne tel de la table
 					  String tel = ListV.get(0).getTel();
 					  String emailT = ListV.get(0).getEmail();
 					  System.out.println(tel);
@@ -119,8 +121,7 @@ public class ClientServlet extends HttpServlet {
 						  String msg= "email "+request.getParameter("email")+" tel "+request.getParameter("tel") + " existe deja";
 						  request.setAttribute("msg",msg);
 					  }
-					  request.getRequestDispatcher("admin/erreurPage.jsp").forward(request, response);
-					  
+					  request.getRequestDispatcher("admin/erreurPage.jsp").forward(request, response);					  
 					  
 				  }else {// l'email n'existe pas
 						cltImp.Add(clt);
@@ -130,7 +131,7 @@ public class ClientServlet extends HttpServlet {
 			  }		
 		}
 		
-		//CONNEXION
+		//CONNEXION----------------------
 		else if(btnForm.equals("Connexion")){
 			System.out.println("espace connexion");		
 			
@@ -155,16 +156,19 @@ public class ClientServlet extends HttpServlet {
 	        	//recuperer l'enregistrement retourné par la fonction d'authentification
 	        	Users user2 = cltImp.Authentification(email, pwd).get(0);
 	     	      
+	        		//creation de session
 					HttpSession sessionAdmin = request.getSession();		
 					sessionAdmin.setAttribute("user", user);
+					sessionAdmin.setAttribute("idClient", user2.getId());
 					sessionAdmin.setAttribute("email", email);	
 					sessionAdmin.setAttribute("role", "admin");	
-					sessionAdmin.setAttribute("client", user2.getNom()+" "+user2.getPrenom());
-					//response.sendRedirect("index.jsp");					
+					sessionAdmin.setAttribute("client", user2.getNom()+" "+user2.getPrenom());				
 					
+					//si admin => dashboard admin
 					if(email.contains("admin")){
 						System.out.println("vous etes admin");
 						request.getRequestDispatcher("admin/homeAdmin.jsp").forward(request, response);	
+					//sinon client= > page dashboard client
 					}else {
 						System.out.println("vous etes client");														  
 						request.getRequestDispatcher("client/homeClient.jsp").forward(request, response);						  
@@ -173,9 +177,8 @@ public class ClientServlet extends HttpServlet {
 				} 
 		}
 	        
-
 					
-		//MODIFIER
+		//MODIFIER-------------------------------
 		else if (btnForm.equals("modifier")) {				
 			Users clt = new Users();
 			clt.setAdresse(request.getParameter("adresse"));

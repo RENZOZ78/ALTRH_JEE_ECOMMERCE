@@ -7,22 +7,20 @@ import model.Panier;
 public interface PanierInterface {
 	
 		//creation de la fonction AddPanier
-		public void Add(Paniers panier);
+		public void ajouter(Panier panier);
 		
-		//fonction d'affichage= pour afficher les enregistrement de la table
-		//la fonction va nous afficher une liste des clients
-		public List<Panier> getPanier();
+		//fonction d'affichage= pour afficher les enregistrement de la table		
+		public List<Panier> getPanier(int idClient);
 		
 		//fonction de modificaiton 
-		public void  Modifier(Users client);
+		public void  Modifier(Panier panier);
 		
 		//fonction supprimer
-		public void Supprimer(int idClient); //idClient = nom du parametre
+		public void Supprimer(int idPanier); //idClient = nom du parametre
 		
 		//fonction de recherche= return une liste de client
-		public List<Users> Recherche(String rech);
+		public List<Panier> Recherche(String rech);
 			
-		//fonction rechercher 
-			public List<Users> RechercheEmail( String email, String tel);
+
 		
 }

@@ -83,7 +83,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.jsp">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
@@ -95,7 +95,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href="index.jsp">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -429,8 +429,8 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
-				<h1>INTERFACE AFFICHAGE</h1>
+                    <h1 class="h3 mb-4 text-gray-800">PRODUITS</h1>
+				<h1>Interface produit</h1>
 				
 				<table class="table">
 				  <thead class="thead-dark">
@@ -452,7 +452,7 @@
 					  for(Produits pdt:produitsImp.getProduit()){ %>
 					  
 <!-- DEBUT MODAL AJOUT -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -492,7 +492,7 @@
        </form>
     </div>
   </div>
-</div>
+</div> -->
 <!-- FIN MODAL AJOUT -->
 					  
 <!--debut modal modifier -->
@@ -508,7 +508,7 @@
        <form method="post" action="produits" id="produitAjout">
 	      <div class="modal-body">      	         
 	           <div class="form-group">
-	            <label for="prenom" class="col-form-label">Reference:</label>
+	            <label for="reference" class="col-form-label">Reference:</label>
 	            <input type="text" class="form-control" id="reference" name="ref"  value="<%=pdt.getReference() %>" >
 	          </div>
 	           <div class="form-group">

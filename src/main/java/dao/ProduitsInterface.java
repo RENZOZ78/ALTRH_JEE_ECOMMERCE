@@ -21,7 +21,7 @@ public interface ProduitsInterface {
 	public void Supprimer(int idClient); //idClient = nom du parametre
 	
 	//fonction de recherche= return une liste de produit
-	public List<Produits> Recherche(String rechProduit);
+	public List<Produits> Recherche(int rechProduit);
 			
 	
 	

@@ -5,7 +5,7 @@ public class Panier {
 	 int id;
 	 int idClient;
 	 int idProduit;
-	 int Quantite;
+	 int quantite;
 	 
 	 
 	public int getId() {
@@ -27,10 +27,10 @@ public class Panier {
 		this.idProduit = idProduit;
 	}
 	public int getQuantite() {
-		return Quantite;
+		return quantite;
 	}
 	public void setQuantite(int quantite) {
-		Quantite = quantite;
+		this.quantite = quantite;
 	}
 	 
 }
