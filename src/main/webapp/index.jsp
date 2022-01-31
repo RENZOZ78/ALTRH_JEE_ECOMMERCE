@@ -277,10 +277,14 @@
 			<!-- Contact ends -->
 
 			
-			<!-- Shopping kart starts -->
-			<div class="tb-shopping-cart pull-right">
-			<%PanierImp panierImp=new PanierImp();
-			int idClient = Integer.parseInt(request.getSession().getAttribute("idClient").toString());
+			<!-- SHOPPING KART starts -->			
+			
+			<div  class="tb-shopping-cart pull-right">
+			<%
+			// si le client est connecte, tu m'affiches le panier
+			if(request.getSession().getAttribute("idClient")!=null && request.getSession().getAttribute("client")!=null ){
+			PanierImp panierImp=new  PanierImp();											
+			int idClient = Integer.parseInt(request.getSession().getAttribute("idClient").toString());		
 			int nbPanier = panierImp.getPanier(idClient).size();
 			%>
 				<!-- Link with badge -->
@@ -293,8 +297,8 @@
 						<!-- Item 1 -->
 						<% 
 						ProduitsImp produitImp= new ProduitsImp();
-				  for(Panier pan:panierImp.getPanier(idClient)){ 
-					  Produits prd= produitImp.Recherche(pan.getIdProduit()).get(0);
+				  		for(Panier pan:panierImp.getPanier(idClient)){ 
+					 	Produits prd= produitImp.Recherche(pan.getIdProduit()).get(0);
 					  %>
 						<li>
 							<!-- Item image -->
@@ -306,6 +310,11 @@
 								<h5><a href="#"> <%=prd.getDesignation() %> </a></h5>
 								<!-- Item price -->
 								<span class="label label-color label-sm"><%=prd.getPrix() %></span>
+								<!-- modifier panier -->
+								<a href="#" onclick="if(!confirm('voulez-vous modifier?')) return false"  data-toggle="modal" data-target="#ModalEditProduit_<%=pdt.getId() %>" class="btn btn-outline-danger" >modfier</a>
+								<!-- suprimer produit -->							    
+							     <a href="panier?action=supprimerPanier&id=<%=pan.getId() %>" onclick="if(!confirm('voulez-vous supprimer?')) return false" class="btn btn-outline-primary"  >supprimer</a></td>
+					     		
 							</div>
 							<div class="clearfix"></div>
 						</li>
@@ -313,8 +322,8 @@
 						<!-- Item 2 -->
 						
 					</ul>
-					<a href="#" class="btn btn-white btn-sm">View Cart</a> &nbsp; <a href="#" class="btn btn-color btn-sm">Checkout</a>
-				</div>
+					<a href="#" class="btn btn-white btn-sm">Voir Panier</a> &nbsp; <a href="#" class="btn btn-color btn-sm">Paiement</a>
+				</div><%} %>
 				
 				
 				<!-- affichage deconnecte=>creer compte/seconnecter ou  -->
@@ -642,7 +651,7 @@
 			<% ProduitsImp produitsImp=new ProduitsImp();
 				  for(Produits pdt:produitsImp.getProduit()){ %>
 					  
-		  <!-- debut modal panier -->
+  <!-- DEBUT MODAL PANIER -->
  <div class="modal fade" id="modal_addPanier<%=pdt.getId() %>" tabindex="-1" aria-labelledby="modal_connexion" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -669,6 +678,7 @@
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
 	        <button type="submit" class="btn btn-primary" name="btn" value="ajout" >Ajouter au panier</button>
+	    
 	      </div>	      
        </form>
        

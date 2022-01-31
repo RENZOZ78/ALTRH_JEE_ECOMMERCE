@@ -41,12 +41,11 @@ public class PanierServlet extends HttpServlet {
 			if(action!=null) {
 				
 				//AFFICHAGE PANIER---------------
-				System.out.println("voivi votre panier");
+				System.out.println("voici votre panier");
 				if(action.equals("affichagePanier")) {
 					request.getRequestDispatcher("index.jsp").forward(request, response);
 				}						
-				//suppression panier-------------
-				
+				//suppression panier-------------				
 				else if(action.equals("supprimerPanier")) {
 					System.out.println("votre panier est supprimé");
 					int id= Integer.parseInt(request.getParameter("id"));
@@ -97,7 +96,12 @@ public class PanierServlet extends HttpServlet {
 				int quantite = Integer.parseInt(request.getParameter("quantite"));
 				p.setIdProduit(Integer.parseInt(idProduit));
 				p.setIdClient(Integer.parseInt(idClient));
-				p.setQuantite(quantite);		
+				p.setQuantite(quantite);	
+				
+				//si je clique sur + => je rajoute un produit
+				if() {
+					
+				}else(i=0; )
 								
 				panierImp.Modifier(p);
 				response.sendRedirect("produits?action=affichageP");

@@ -42,6 +42,7 @@ public class ClientServlet extends HttpServlet {
 		String logoutClient =  request.getParameter("LogoutClient");
 		if(logoutClient != null) {			
 		session.setAttribute("client", null);
+		
 		response.sendRedirect("index.jsp");
 		}
 		

@@ -556,10 +556,10 @@
 					      <td><%=pdt.getPoids() %></td>
 					      <td><%=pdt.getStock() %></td>
 					      
-							<!--lien modifier -->		
+							<!--lien modifier produit -->		
 							<td> <a href="#" onclick="if(!confirm('voulez-vous modifier?')) return false"  data-toggle="modal" data-target="#ModalEditProduit_<%=pdt.getId() %>" class="btn btn-outline-danger" >modfier</a> </td>
 							 
-							<!-- lien supprimer -->
+							<!-- lien supprimer produits -->
 					      <td><a href="produits?action=supprimerP&id=<%=pdt.getId() %>" onclick="if(!confirm('voulez-vous supprimer?')) return false" class="btn btn-outline-primary"  >supprimer</a></td>
 					     
 					 	 </tr>
