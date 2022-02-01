@@ -214,9 +214,52 @@
     </div>
   </div>
 </div>
-<!-- FIN MODAL INSCRIPTION -->
+<!-- FIN MODAL INSCRIPTION ----------------------------------->
 
-<!-- MODAL CONNEXION -->
+
+<% 
+PanierImp panierImp=new  PanierImp();	
+if(request.getSession().getAttribute("idClient")!=null && request.getSession().getAttribute("client")!=null ){	
+	int idClient = Integer.parseInt(request.getSession().getAttribute("idClient").toString());	
+for(Panier pan:panierImp.getPanier(idClient)){ 
+%>
+<div class="modal fade" id="modal_ModifierPanier<%=pan.getId() %>" tabindex="-1" aria-labelledby="modal_connexion" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title bg-info" id="modal_ModifierPanier<%=pan.getId() %>">Panier</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+     <!-- si le client est connecté=> il peut modifier des produits -->
+     
+       <form method="post" action="panier" >
+	      <div class="modal-body">     	       
+	       		<!-- afficher la valeur de l'id, cacher -->
+	        
+	          <!-- l'id client -->
+	            <input type="hidden" name="idPanier"  value="<%=pan.getId()  %>" >
+	           <div class="form-group">
+	            <label for="quantite" class="col-form-label">quantité</label>
+	            <input type="number" class="form-control" id="pwd" name="quantite">
+	          </div>	           
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>	      
+	        <!-- modifier panier -->		
+			<!-- <button type="submit" class="btn btn-primary" name="btn" value="modfierPanier" >modifier au panier</button>	     -->
+	      </div>	      
+       </form>
+    
+    </div>
+  </div>
+</div>
+<% }} %>
+
+
+<!-- MODAL CONNEXION ---------------------------------------->
 <div class="modal fade" id="modal_connexion" tabindex="-1" aria-labelledby="modal_connexion" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -277,28 +320,34 @@
 			<!-- Contact ends -->
 
 			
-			<!-- SHOPPING KART starts -->			
+<!-- SHOPPING KART starts -------------------------------------------------->		
 			
 			<div  class="tb-shopping-cart pull-right">
 			<%
 			// si le client est connecte, tu m'affiches le panier
-			if(request.getSession().getAttribute("idClient")!=null && request.getSession().getAttribute("client")!=null ){
-			PanierImp panierImp=new  PanierImp();											
-			int idClient = Integer.parseInt(request.getSession().getAttribute("idClient").toString());		
-			int nbPanier = panierImp.getPanier(idClient).size();
+			if(request.getSession().getAttribute("idClient")!=null && request.getSession().getAttribute("client")!=null ){													
+			int idClient2 = Integer.parseInt(request.getSession().getAttribute("idClient").toString());		
+			int nbPanier = panierImp.getPanier(idClient2).size();
 			%>
 				<!-- Link with badge -->
 				<a href="#" class="btn btn-white btn-xs b-dropdown"><i class="fa fa-shopping-cart"></i> <i class="fa fa-angle-down color"></i> <span class="badge badge-color"><%=nbPanier %></span></a>
 				<!-- Dropdown content with item details -->
-				<div class="b-dropdown-block">
+				<div class="b-dropdown-block Panier ">
 					<!-- Heading -->
 					<h4><i class="fa fa-shopping-cart color"></i> Your Items</h4>
 					<ul class="list-unstyled">
+					
 						<!-- Item 1 -->
 						<% 
-						ProduitsImp produitImp= new ProduitsImp();
-				  		for(Panier pan:panierImp.getPanier(idClient)){ 
-					 	Produits prd= produitImp.Recherche(pan.getIdProduit()).get(0);
+						ProduitsImp produitImpS= new ProduitsImp();
+						double total=0.0;
+				  		for(Panier pan:panierImp.getPanier(idClient2)){ 
+					 	Produits prd= produitImpS.Recherche(pan.getIdProduit()).get(0);
+					 	
+					 	//total du panier
+					 	double res = prd.getPrix() * pan.getQuantite();	
+					 	total += res;
+					 	
 					  %>
 						<li>
 							<!-- Item image -->
@@ -307,31 +356,39 @@
 							</div>
 							<!-- Item heading and price -->
 							<div class="cart-title">
-								<h5><a href="#"> <%=prd.getDesignation() %> </a></h5>
+								<h5><a href="#"  > <%=prd.getDesignation() %> </a></h5>
+								<!-- Item quantite -->
+								<span class="label label-color label-sm">Qté:<%=pan.getQuantite() %></span><br>
 								<!-- Item price -->
-								<span class="label label-color label-sm"><%=prd.getPrix() %></span>
+								<span class="label label-color label-sm">Prix:<%=prd.getPrix()*pan.getQuantite() %></span><br>
 								<!-- modifier panier -->
-								<a href="#" onclick="if(!confirm('voulez-vous modifier?')) return false"  data-toggle="modal" data-target="#ModalEditProduit_<%=pdt.getId() %>" class="btn btn-outline-danger" >modfier</a>
-								<!-- suprimer produit -->							    
-							     <a href="panier?action=supprimerPanier&id=<%=pan.getId() %>" onclick="if(!confirm('voulez-vous supprimer?')) return false" class="btn btn-outline-primary"  >supprimer</a></td>
+								<form method="post" action="panier" class="form_total" >	
+									<input type="hidden" name="id" value="<%=pan.getId() %>" >								
+									<input type="number" name="quantite" value="<%=pan.getQuantite() %>" >						
+									<button type="submit" class="btn btn-primary" name="btn" value="modifierPanier" >modifier le panier</button>
+								</form>
+								<!-- supprimer produit -->							    
+							     <a href="panier?action=supprimerPanier&id=<%=pan.getId() %>" onclick="if(!confirm('voulez-vous vraiment supprimer ce produit?')) return false"  class="btn btn-outline-primary"  >supprimer</a></td>
 					     		
 							</div>
 							<div class="clearfix"></div>
 						</li>
 						<%} %>
-						<!-- Item 2 -->
 						
+						<!-- Item 2 -->						
 					</ul>
-					<a href="#" class="btn btn-white btn-sm">Voir Panier</a> &nbsp; <a href="#" class="btn btn-color btn-sm">Paiement</a>
-				</div><%} %>
+					<a href="client/shopping-cart.jsp" class="btn btn-white btn-sm">Voir Panier</a> &nbsp;
+					<a href="#" class="btn btn-color btn-sm">Paiement</a>
+					<input type="button" class="btn btn-outline-success" value="<%=total%>"  >
+				</div><%} %>				
 				
-				
-				<!-- affichage deconnecte=>creer compte/seconnecter ou  -->
+				<!-- affichage deconnecte =>creer compte/seconnecter ou dans l'onglet -->
 				<%if(request.getSession().getAttribute("client")==null){%>
 					<a href="#" class="btn btn-white btn-xs" data-toggle="modal" data-target="#exampleModal" >Créer un compte</a>
 					<a href="#" class="btn btn-white btn-xs" data-toggle="modal" data-target="#modal_connexion" >Se connecter</a>
 					<a href="admin" class="btn btn-white btn-xs"  >Administrateur</a>
 					<% }
+				
 				//sinon connecté
 				else{					
 						String client = request.getSession().getAttribute("client").toString();
@@ -344,9 +401,10 @@
 				<% } %>
 				
 			</div>
-			<!-- Shopping kart ends -->
+			<!-- FIN Shopping KART ends ------------------------------->
+			
 
-			<!-- Langauge starts -->
+			<!-- Language starts -->
 			<div class="tb-language dropdown pull-right">
 				<a href="#" data-target="#" data-toggle="dropdown"><i class="fa fa-globe"></i> English <i class="fa fa-angle-down color"></i></a>
 				<!-- Dropdown menu with languages -->
@@ -647,71 +705,75 @@
 			</div>
 
 			<div class="row">
-			<!-- debut de bloc -->
-			<% ProduitsImp produitsImp=new ProduitsImp();
-				  for(Produits pdt:produitsImp.getProduit()){ %>
-					  
-  <!-- DEBUT MODAL PANIER -->
- <div class="modal fade" id="modal_addPanier<%=pdt.getId() %>" tabindex="-1" aria-labelledby="modal_connexion" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title bg-info" id="modal_connexion">Panier</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      
-     <!-- si le client est connecté=> il peut ajouter des produits -->
-      <% if(request.getSession().getAttribute("idClient")!= null) { %>
-       <form method="post" action="panier" >
-	      <div class="modal-body">     	       
-	       		<!-- afficher la valeur de l'id, cacher -->
-	          <input type="hidden" name="idProduit"   value="<%=pdt.getId()  %>" >
-	          <!-- l'id client -->
-	            <input type="hidden" name="idClient"  value="<%=request.getSession().getAttribute("idClient")  %>" >
-	           <div class="form-group">
-	            <label for="quantite" class="col-form-label">quantité</label>
-	            <input type="number" class="form-control" id="pwd" name="quantite">
-	          </div>	           
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
-	        <button type="submit" class="btn btn-primary" name="btn" value="ajout" >Ajouter au panier</button>
-	    
-	      </div>	      
-       </form>
-       
-       <% }else { %>
-       <h1>vous n'etes pas connecté!</h1>
-       <% } %>
-       
-    </div>
-  </div>
-</div>
-<!-- fin modal ajouter panier -->
-					  
-				<div class="col-md-3 col-sm-6">
-					<!-- Shopping items -->
-					<div class="shopping-item">
-						<!-- Image -->
-						<a href="single-product.html"><img class="img-responsive" src="img/product/shop_item_01.jpg" alt="" /></a>
-						<!-- Shopping item name / Heading -->
-						<h4><a href="single-product.html"><%=pdt.getDesignation() %></a><span class="color pull-right"><%=pdt.getPrix() %></span></h4>
-						<div class="clearfix"></div>
-						<!-- Buy now button -->
-						<div class="visible-xs">
-							<a class="btn btn-color btn-sm" href="#">Acheter</a>
-						</div>
-						<!-- Shopping item hover block & link -->
-						<div class="item-hover bg-color hidden-xs">
-							<a  data-toggle="modal" data-target="#modal_addPanier<%=pdt.getId() %>" href="#">Ajouter </a>
+				<!-- debut de bloc -->
+				<% ProduitsImp produitsImp=new ProduitsImp();
+					  for(Produits pdt:produitsImp.getProduit()){ %>
+						  
+				  <!-- DEBUT MODAL PANIER AJOUT -------------------------------------------------->
+				 <div class="modal fade" id="modal_addPanier<%=pdt.getId() %>" tabindex="-1" aria-labelledby="modal_connexion" aria-hidden="true">
+				  <div class="modal-dialog">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h5 class="modal-title bg-info" id="modal_connexion">Panier</h5>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+				      </div>
+				      
+				     <!-- si le client est connecté=> il peut ajouter des produits -->
+				      <% if(request.getSession().getAttribute("idClient")!= null) { %>
+				       <form method="post" action="panier" >
+					      <div class="modal-body">     	       
+					       		<!-- afficher la valeur de l'id, cacher -->
+					          <input type="hidden" name="idProduit"   value="<%=pdt.getId()  %>" >
+					          <!-- l'id client -->
+					            <input type="hidden" name="idClient"  value="<%=request.getSession().getAttribute("idClient")  %>" >
+					           <div class="form-group">
+					            <label for="quantite" class="col-form-label">quantité</label>
+					            <input type="number" class="form-control" id="pwd" name="quantite">
+					          </div>	           
+					      </div>
+					      <div class="modal-footer">
+					        <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
+					        <!-- ajouter panier -->
+					        <button type="submit" class="btn btn-primary" name="btn" value="ajout" >Ajouter au panier</button>
+					        <!-- modifier panier -->		
+<!-- 							<button type="submit" class="btn btn-primary" name="btn" value="modfiierPanier" >modifier au panier</button> -->					    
+					      </div>	      
+				       </form>
+				       
+				       <% }else { %>
+				       <h1>vous n'etes pas connecté!</h1>
+				       <% } %>
+				       
+				    </div>
+				  </div>
+				</div>
+				<!-- FIN MODAL MODIFIER panier ------------------------------------------------------------->
+						  
+					<div class="col-md-3 col-sm-6">
+						<!-- Shopping items -->
+						<div class="shopping-item">
+							<!-- Image -->
+							<a href="single-product.html"><img class="img-responsive" src="img/product/shop_item_01.jpg" alt="" /></a>
+							<!-- Shopping item name / Heading -->
+							<h4><a href="single-product.html"><%=pdt.getDesignation() %></a><span class="color pull-right"><%=pdt.getPrix() %></span></h4>
+							<div class="clearfix"></div>
+							<!-- Buy now button -->
+							<div class="visible-xs">
+								<a class="btn btn-color btn-sm" href="#">Acheter</a>
+							</div>
+							<!-- Shopping item hover block & link -->
+							<div class="item-hover bg-color hidden-xs">
+								<a  data-toggle="modal" data-target="#modal_addPanier<%=pdt.getId() %>" href="#">Ajouter </a>
+							</div>
 						</div>
 					</div>
-				</div>
-				<!-- fin de bloc -->	
-				<% } %>			
+					<!-- fin de bloc -->	
+					<% } %>							
 			</div>
+			
+			
 			<!-- Pagination -->
 			<div class="shopping-pagination pull-right">
 				<ul class="pagination">

@@ -19,7 +19,9 @@ public interface PanierInterface {
 		public void Supprimer(int idPanier); //idClient = nom du parametre
 		
 		//fonction de recherche= return une liste de client
-		public List<Panier> Recherche(String rech);
+		public List<Panier> Recherche(int idClient);
+		
+		public List<Panier> RecherchePanier2(int idClient, int IdProduit);
 			
 
 		

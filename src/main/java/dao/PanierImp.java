@@ -8,6 +8,7 @@ import java.util.List;
 
 import connexion.ConnexionBD;
 import model.Panier;
+import model.Produits;
 import model.Panier;
 
 public class PanierImp implements PanierInterface {
@@ -78,7 +79,9 @@ public class PanierImp implements PanierInterface {
 	@Override
 	public void Modifier(Panier panier) {
 		// TODO Auto-generated method stub
-		 String sql="update panier set idClient='"+panier.getIdClient()+"',idProduit='"+panier.getIdProduit()+"',quantite='"+panier.getQuantite()+"'  ";
+		 String sql="update panier set quantite='"+panier.getQuantite()+"' "
+				 +"where id= "+panier.getId();
+		 System.out.println(sql);
 		 try {
 				PreparedStatement ps=conn.getConnection().prepareStatement(sql);							
 				int res = ps.executeUpdate();
@@ -115,10 +118,72 @@ public class PanierImp implements PanierInterface {
 	}
 
 	@Override
-	public List<Panier> Recherche(String rech) {
+	public List<Panier> Recherche(int idClient) {
 		// TODO Auto-generated method stub
-		
-		return null;
+				String sql= " select * from panier where idClient= "+idClient;
+				System.out.println(sql);
+				//Execution de requete
+				//Preparation de requete SQL
+				List<Panier> ListPanier=new ArrayList<Panier>();
+								
+				try {
+					//prepration de requete sql
+					PreparedStatement ps=conn.getConnection().prepareStatement(sql);
+					
+					ResultSet resultat=ps.executeQuery(); //de type Resultset
+					
+					//parcourir le resultat de type Resultset
+					while(resultat.next()) {
+						Panier panier = new Panier();
+						panier.setId(resultat.getInt("id"));
+						panier.setIdProduit(resultat.getInt("idProduit"));
+						panier.setIdClient(resultat.getInt("idClient"));
+						panier.setQuantite(resultat.getInt("Quantite"));
+						
+						//Enregistrer l'enregistrementd "produit" de la table de "User" dans un array de type List<Users>
+						//ajouter ou stoke dans cette liste l'objet de type users
+						ListPanier.add(panier);		
+					}
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}	
+				return ListPanier;
+	}
+
+
+	@Override
+	public List<Panier> RecherchePanier2(int idClient, int IdProduit) {
+		// TODO Auto-generated method stub
+		String sql= " select * from panier where idClient= '"+idClient+"' && idProduit='"+ IdProduit+"' " ;
+		System.out.println(sql);
+		//Execution de requete
+		//Preparation de requete SQL
+		List<Panier> ListPanier=new ArrayList<Panier>();
+						
+		try {
+			//prepration de requete sql
+			PreparedStatement ps=conn.getConnection().prepareStatement(sql);
+			
+			ResultSet resultat=ps.executeQuery(); //de type Resultset
+			
+			//parcourir le resultat de type Resultset
+			while(resultat.next()) {
+				Panier panier = new Panier();
+				panier.setId(resultat.getInt("id"));
+				panier.setIdProduit(resultat.getInt("idProduit"));
+				panier.setIdClient(resultat.getInt("idClient"));
+				panier.setQuantite(resultat.getInt("Quantite"));
+				
+				//Enregistrer l'enregistrementd "produit" de la table de "User" dans un array de type List<Users>
+				//ajouter ou stoke dans cette liste l'objet de type users
+				ListPanier.add(panier);		
+		}
+			}
+		catch (Exception e) {
+			e.printStackTrace();
+		}	
+		return ListPanier;
 	}
 }
 

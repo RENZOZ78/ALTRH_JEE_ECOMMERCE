@@ -1,6 +1,8 @@
 package controller;
 
 import java.io.IOException;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -81,35 +83,49 @@ public class PanierServlet extends HttpServlet {
 					
 			p.setIdProduit(Integer.parseInt(idProduit));
 			p.setIdClient(Integer.parseInt(idClient));
-			p.setQuantite(quantite);					
-						
-			panierImp.ajouter(p);
-			response.sendRedirect("index.jsp");
+			p.setQuantite(quantite);				
+			
+			//fonction de recherhe	
+			//List<Panier> reqPanier= panierImp.Recherche(Integer.parseInt(request.getParameter("quantite")));
+			List<Panier> reqPanier= panierImp.RecherchePanier2(Integer.parseInt(request.getParameter("idClient")), Integer.parseInt(idProduit));
+			
+			//compter le nb enregistrements
+			int nbEnreg = reqPanier.size();
+			
+				//s'il n y a pas d'enregistrement dans la table
+				if(nbEnreg==0) {	
+					System.out.println("il n'ya pas d'enregistrement dans la table");
+					//ajout de produit
+					panierImp.ajouter(p);
+					response.sendRedirect("index.jsp");
+				
+				//s'il ya des enregistrements dans la table
+				}else if(nbEnreg>0) {
+					System.out.println("il ya des enregsitrement existant dans la table");
+					int idProduitPanier= reqPanier.get(0).getIdProduit();
+					int sumQte = reqPanier.get(0).getQuantite()+ quantite;
+					p.setQuantite(sumQte);
+					p.setId(reqPanier.get(0).getId());
+					panierImp.Modifier(p);
+					
+					response.sendRedirect("index.jsp");				
+				}						
 			}
 			
-			else if(action.equals("modifier")) {
-				System.out.println("votre panier est modifié");
-				//MODIFIER DE PÄNIER----------------------------
-				System.out.println("vous avez modifié un panier:");
-				String idProduit= request.getParameter("idProduit");
-				String idClient =request.getParameter("idClient");
+			//MODIFIER DE PÄNIER----------------------------
+			else if(action.equals("modifierPanier")) {
+				System.out.println("votre panier est modifié");							
 				int quantite = Integer.parseInt(request.getParameter("quantite"));
-				p.setIdProduit(Integer.parseInt(idProduit));
-				p.setIdClient(Integer.parseInt(idClient));
-				p.setQuantite(quantite);	
 				
-				//si je clique sur + => je rajoute un produit
-				if() {
-					
-				}else(i=0; )
-								
+				p.setId(Integer.parseInt(request.getParameter("id")));
+				p.setQuantite(quantite);	
+											
 				panierImp.Modifier(p);
-				response.sendRedirect("produits?action=affichageP");
+				response.sendRedirect("index.jsp");
 				}
-		}
-		
-		
-		
+			else {
+				System.out.println("vous n'avez rien modifier");
+			}
+		}		
 	}
-
 }

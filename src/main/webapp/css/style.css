@@ -612,6 +612,14 @@ h2.accordion-title {
     top: auto;
     left: auto
 }
+
+.form_total{
+	width: auto;
+}
+.Panier{
+	max-width: auto;
+}
+
 @media (min-width: 768px) {
     .nav-pills.nav-justified>li,
     .nav-tabs.nav-justified>li {
@@ -741,6 +749,8 @@ h2.accordion-title {
     .tab-container.right .nav-tabs>li.active>a {
         border-left-color: #e7e2d1;
     }
+    
+    
 }
 /*--------------- shipping & taxes -----------------*/
 
