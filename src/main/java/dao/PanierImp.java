@@ -18,7 +18,7 @@ public class PanierImp implements PanierInterface {
 	@Override
 	public void ajouter(Panier panier) {
 		// TODO Auto-generated method stub
-		String sql= "insert into panier(idClient,idProduit,quantite) values('"+panier.getIdClient()+"','"+panier.getIdProduit()+"','"+panier.getQuantite()+"')";
+		String sql= "insert into panier(idClient,idProduit,quantite,etatCommande) values('"+panier.getIdClient()+"','"+panier.getIdProduit()+"','"+panier.getQuantite()+"','"+panier.getEtatCommande()+"')";
 		System.out.println(sql);
 		//Execution de requete
 		//Preparation de requete SQL
@@ -44,7 +44,7 @@ public class PanierImp implements PanierInterface {
 	@Override
 	public List<Panier> getPanier(int idClient) {
 		// TODO Auto-generated method stub
-		String sql= " select * from panier  where idClient="+idClient;
+		String sql= " select * from panier  where etatCommande!=1 && idClient="+idClient;
 		System.out.println(sql);
 		//Execution de requete
 		//Preparation de requete SQL
@@ -155,7 +155,7 @@ public class PanierImp implements PanierInterface {
 	@Override
 	public List<Panier> RecherchePanier2(int idClient, int IdProduit) {
 		// TODO Auto-generated method stub
-		String sql= " select * from panier where idClient= '"+idClient+"' && idProduit='"+ IdProduit+"' " ;
+		String sql= " select * from panier where idClient= '"+idClient+"' && idProduit='"+ IdProduit+"' && etatCommande!=1" ;
 		System.out.println(sql);
 		//Execution de requete
 		//Preparation de requete SQL
@@ -184,6 +184,30 @@ public class PanierImp implements PanierInterface {
 			e.printStackTrace();
 		}	
 		return ListPanier;
+	}
+
+
+
+	@Override
+	public void Commande(int idClient) {
+		// TODO Auto-generated method stub
+		 String sql="update panier set etatCommande=1 where idClient= "+idClient;
+		 System.out.println(sql);
+		 try {
+				PreparedStatement ps=conn.getConnection().prepareStatement(sql);							
+				int res = ps.executeUpdate();
+				if(res==0) {
+					System.out.println("modification echouée");
+				}
+				else {
+					System.out.println("modification effectuée");
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+		
+		
 	}
 }
 

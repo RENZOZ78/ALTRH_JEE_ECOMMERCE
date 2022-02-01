@@ -6,8 +6,15 @@ public class Panier {
 	 int idClient;
 	 int idProduit;
 	 int quantite;
+	 int etatCommande;
 	 
 	 
+	public int getEtatCommande() {
+		return etatCommande;
+	}
+	public void setEtatCommande(int etatCommande) {
+		this.etatCommande = etatCommande;
+	}
 	public int getId() {
 		return id;
 	}

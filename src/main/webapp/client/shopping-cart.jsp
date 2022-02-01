@@ -22,14 +22,14 @@
 	<link href='http://fonts.googleapis.com/css?family=Ubuntu:400,300,500,700' rel='stylesheet' type='text/css'>
 	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-	<link rel="stylesheet" href="css/bootstrap.min.css">
-	<link rel="stylesheet" href="css/skin-lblue.css">
-	<link rel="stylesheet" href="css/font-awesome.min.css">
-	<link rel="stylesheet" href="css/normalize.css">
-	<link rel="stylesheet" href="css/owl.carousel.css">
-	<link rel="stylesheet" href="css/main.css">
-	<link rel="stylesheet" href="style.css">
-	<link rel="stylesheet" href="css/responsive.css">
+	<link rel="stylesheet" href="TemplateAdmin/css/bootstrap.min.css">
+	<link rel="stylesheet" href="TemplateAdmin/css/skin-lblue.css">
+	<link rel="stylesheet" href="TemplateAdmin/css/font-awesome.min.css">
+	<link rel="stylesheet" href="TemplateAdmin/css/normalize.css">
+	<link rel="stylesheet" href="TemplateAdmin/css/owl.carousel.css">
+	<link rel="stylesheet" href="TemplateAdmin/css/main.css">
+	<link rel="stylesheet" href="TemplateAdmin/css/style.css">
+	<link rel="stylesheet" href="TemplateAdmin/css/responsive.css">
 	<script src="js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
 

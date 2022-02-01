@@ -22,6 +22,9 @@ public interface PanierInterface {
 		public List<Panier> Recherche(int idClient);
 		
 		public List<Panier> RecherchePanier2(int idClient, int IdProduit);
+		
+		public void  Commande(int idClient);
+		
 			
 
 		

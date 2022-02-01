@@ -36,7 +36,7 @@ public class PanierServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		
-		//instance de la classe Pnaier
+		//instance de la classe Panier
 		PanierImp panImp=new PanierImp();
 		Panier panier = new Panier();
 		String action =request.getParameter("action");
@@ -52,7 +52,12 @@ public class PanierServlet extends HttpServlet {
 					System.out.println("votre panier est supprimé");
 					int id= Integer.parseInt(request.getParameter("id"));
 							panImp.Supprimer(id);
-							response.sendRedirect("panier?action=affichagePanier");
+							response.sendRedirect("index.jsp");
+				}
+				else if(action.equals("paiement")) {
+					int IdClient = Integer.parseInt(request.getSession().getAttribute("idClient").toString());
+					panImp.Commande(IdClient);
+					response.sendRedirect("index.jsp");
 				}
 			}
 							
@@ -96,6 +101,7 @@ public class PanierServlet extends HttpServlet {
 				if(nbEnreg==0) {	
 					System.out.println("il n'ya pas d'enregistrement dans la table");
 					//ajout de produit
+					p.setEtatCommande(0);
 					panierImp.ajouter(p);
 					response.sendRedirect("index.jsp");
 				

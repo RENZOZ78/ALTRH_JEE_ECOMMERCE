@@ -149,6 +149,7 @@
 	<!-- Owl carousel -->
 	<link href="css/owl.carousel.css" rel="stylesheet">
 
+	<!-- css -->
 	<link rel="stylesheet" href="css/main.css">
 	<link rel="stylesheet" href="css/style.css">
 	<%-- 	<link rel="stylesheet"  type="text/css" href="${pageContext.request.contextPath}/css/style.css" >  --%>
@@ -377,9 +378,13 @@ for(Panier pan:panierImp.getPanier(idClient)){
 						
 						<!-- Item 2 -->						
 					</ul>
+					<% if(nbPanier != 0) { %>
 					<a href="client/shopping-cart.jsp" class="btn btn-white btn-sm">Voir Panier</a> &nbsp;
-					<a href="#" class="btn btn-color btn-sm">Paiement</a>
+					<a href="panier?action=paiement" class="btn btn-color btn-sm">Paiement</a>
 					<input type="button" class="btn btn-outline-success" value="<%=total%>"  >
+					<% }else{ %>					
+					<input type="button" class="btn btn-danger" value="votre panier est vide" >
+					<% } %>
 				</div><%} %>				
 				
 				<!-- affichage deconnecte =>creer compte/seconnecter ou dans l'onglet -->
